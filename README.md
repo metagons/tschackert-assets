@@ -1,0 +1,1 @@
+# Tschackert public CDN assets
