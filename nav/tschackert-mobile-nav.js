@@ -13,6 +13,7 @@
 
   var LOGO_URL = "https://framerusercontent.com/images/13Uiui9ACqyo6DnuT4zwgz38QdU.png?width=1176&height=281";
 
+  var SERVICE_CDN = "https://cdn.jsdelivr.net/gh/metagons/tschackert-assets@main/services";
   var NAV = [
     { label: "Startseite", href: "/" },
     { label: "Über Uns", href: "/ueber-uns" },
@@ -20,20 +21,20 @@
       label: "Leistungen",
       href: "/leistungen",
       children: [
-        { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", featured: true },
-        { label: "Perfekte Veneers", desc: "Hauchdünne Keramikschalen, ohne Beschleifen", href: "/leistungen/veneers" },
-        { label: "Zahnimplantate", desc: "Künstliche Wurzeln, wie eigene Zähne", href: "/leistungen/zahnimplantate" },
-        { label: "Ästhetische Kieferorthopädie", desc: "Transparente Aligner für Erwachsene", href: "/leistungen/kieferorthopaedie" },
-        { label: "CMD Funktionsdiagnostik", desc: "Bei Kopfschmerzen, Migräne, Tinnitus", href: "/leistungen/cmd" },
-        { label: "Angstpatienten", desc: "Sanfte Sedierung & Vollnarkose vor Ort", href: "/leistungen/angstpatienten" },
-        { label: "Dental Power Splint", desc: "Patentierte Aufbissschiene für Sportler", href: "/leistungen/dental-power-splint" },
-        { label: "Prophylaxe", desc: "Individuelle Zahnpflege & Vorsorge", href: "/leistungen/prophylaxe" },
-        { label: "Bleaching", desc: "Schonende Aufhellung in der Praxis", href: "/leistungen/bleaching" },
-        { label: "Zahnersatz", desc: "Aus eigenem Meisterlabor vor Ort", href: "/leistungen/zahnersatz" },
-        { label: "Parodontologie", desc: "Zahnfleischbehandlung & Recall", href: "/leistungen/parodontologie" },
-        { label: "Endodontie", desc: "Wurzelbehandlung mit 3D-Diagnostik", href: "/leistungen/endodontie" },
-        { label: "Zahnerhalt", desc: "Ihre Zähne so lange wie möglich", href: "/leistungen/zahnerhalt" },
-        { label: "Mock-up", desc: "Veneers vorab im Mund testen", href: "/leistungen/mock-up" }
+        { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
+        { label: "Perfekte Veneers", desc: "Hauchdünne Keramik, ohne Beschleifen", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" },
+        { label: "Zahnimplantate", desc: "Künstliche Wurzeln, wie eigene Zähne", href: "/leistungen/zahnimplantate", img: "x6kw1r" },
+        { label: "Ästhetische Kieferorthopädie", desc: "Transparente Aligner für Erwachsene", href: "/leistungen/kieferorthopaedie", img: "s5k2oi" },
+        { label: "CMD Funktionsdiagnostik", desc: "Bei Kopfschmerzen, Migräne, Tinnitus", href: "/leistungen/cmd", img: "679tqr" },
+        { label: "Angstpatienten", desc: "Sanfte Sedierung & Vollnarkose", href: "/leistungen/angstpatienten", img: "3d622x" },
+        { label: "Dental Power Splint", desc: "Patentierte Aufbissschiene für Sportler", href: "/leistungen/dental-power-splint", img: "tmqg3w" },
+        { label: "Prophylaxe", desc: "Individuelle Zahnpflege & Vorsorge", href: "/leistungen/prophylaxe", img: "fckkaz" },
+        { label: "Bleaching", desc: "Schonende Aufhellung in der Praxis", href: "/leistungen/bleaching", img: "xn787w" },
+        { label: "Zahnersatz", desc: "Aus eigenem Meisterlabor vor Ort", href: "/leistungen/zahnersatz", img: "e5sn6a" },
+        { label: "Parodontologie", desc: "Zahnfleischbehandlung & Recall", href: "/leistungen/parodontologie", img: "9tv28y" },
+        { label: "Endodontie", desc: "Wurzelbehandlung mit 3D-Diagnostik", href: "/leistungen/endodontie", img: "xouuoy" },
+        { label: "Zahnerhalt", desc: "Ihre Zähne so lange wie möglich", href: "/leistungen/zahnerhalt", img: "pjdsmf" },
+        { label: "Mock-up", desc: "Veneers vorab im Mund testen", href: "/leistungen/mock-up", img: "t4ayby" }
       ]
     },
     { label: "Patientenstimmen", href: "/patientenstimmen" }
@@ -143,9 +144,9 @@
         "transition:opacity 200ms ease, transform 200ms ease;",
         "background:rgb(255,255,255);",
         "border:1px solid rgba(20,44,47,0.06);",
-        "border-radius:14px;padding:18px;",
+        "border-radius:14px;padding:12px;",
         "box-shadow:0 24px 64px rgba(20,44,47,0.12), 0 4px 12px rgba(20,44,47,0.04);",
-        "width:720px;max-width:calc(100vw - 40px);",
+        "width:760px;max-width:calc(100vw - 40px);",
         "z-index:" + (Z - 1) + ";",
       "}",
       "#" + HEADER_ID + " .th-dd:hover .th-dd-panel{",
@@ -157,35 +158,51 @@
         "content:'';position:absolute;top:-14px;left:0;right:0;height:14px;",
       "}",
       "#" + HEADER_ID + " .th-dd-grid{",
-        "display:grid;grid-template-columns:1fr 1fr;gap:2px;",
+        "display:grid;grid-template-columns:1fr 1fr;gap:4px;",
       "}",
+      // Biograph-style item: thumbnail + (label + desc) horizontal
       "#" + HEADER_ID + " .th-dd-item{",
-        "display:flex;flex-direction:column;gap:3px;",
-        "padding:12px 14px;border-radius:10px;",
+        "display:flex;align-items:center;gap:14px;",
+        "padding:10px 12px;border-radius:10px;",
         "text-decoration:none;color:rgb(20,44,47);",
-        "transition:background 160ms ease;",
+        "transition:background 160ms ease;min-width:0;",
       "}",
       "#" + HEADER_ID + " .th-dd-item:hover{background:rgb(244,240,233)}",
-      "#" + HEADER_ID + " .th-dd-item .th-dd-label{",
-        "font-family:'Geist','Inter',system-ui,sans-serif;",
-        "font-size:14px;font-weight:500;color:rgb(20,44,47);",
-        "letter-spacing:-0.015em;line-height:1.3;",
+      "#" + HEADER_ID + " .th-dd-thumb{",
+        "width:42px;height:42px;border-radius:8px;",
+        "background-size:cover;background-position:center;",
+        "background-color:rgb(244,240,233);",
+        "flex-shrink:0;",
       "}",
-      "#" + HEADER_ID + " .th-dd-item .th-dd-desc{",
+      "#" + HEADER_ID + " .th-dd-text{",
+        "display:flex;flex-direction:column;gap:2px;",
+        "min-width:0;flex:1;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-label{",
+        "font-family:'Geist','Inter',system-ui,sans-serif;",
+        "font-size:14px;font-weight:500;",
+        "letter-spacing:-0.015em;line-height:1.25;",
+        "color:rgb(20,44,47);",
+      "}",
+      "#" + HEADER_ID + " .th-dd-desc{",
         "font-family:'Inter',system-ui,sans-serif;",
         "font-size:12px;color:rgb(107,99,89);",
         "letter-spacing:-0.005em;line-height:1.4;",
+        "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;",
       "}",
-      "#" + HEADER_ID + " .th-dd-item.featured{",
-        "grid-column:1 / -1;",
-        "background:rgb(20,44,47);color:rgb(240,238,233);",
-        "padding:14px 16px;",
-      "}",
-      "#" + HEADER_ID + " .th-dd-item.featured:hover{background:rgb(8,22,24)}",
-      "#" + HEADER_ID + " .th-dd-item.featured .th-dd-label{color:rgb(240,238,233);font-size:15px}",
-      "#" + HEADER_ID + " .th-dd-item.featured .th-dd-desc{color:rgba(240,238,233,0.7)}",
+      // ── DARK featured (Feste Zähne) ──
+      "#" + HEADER_ID + " .th-dd-item--dark{background:rgb(20,44,47)}",
+      "#" + HEADER_ID + " .th-dd-item--dark:hover{background:rgb(8,22,24)}",
+      "#" + HEADER_ID + " .th-dd-item--dark .th-dd-label{color:rgb(240,238,233)}",
+      "#" + HEADER_ID + " .th-dd-item--dark .th-dd-desc{color:rgba(240,238,233,0.72)}",
+      // ── GOLD featured (Veneers) ──
+      "#" + HEADER_ID + " .th-dd-item--gold{background:rgb(184,149,106)}",
+      "#" + HEADER_ID + " .th-dd-item--gold:hover{background:rgb(165,132,90)}",
+      "#" + HEADER_ID + " .th-dd-item--gold .th-dd-label{color:rgb(20,44,47)}",
+      "#" + HEADER_ID + " .th-dd-item--gold .th-dd-desc{color:rgba(20,44,47,0.72)}",
+
       "#" + HEADER_ID + " .th-dd-footer{",
-        "margin-top:12px;padding:12px 14px;",
+        "margin-top:8px;padding:14px 14px 4px;",
         "border-top:1px solid rgba(20,44,47,0.08);",
         "display:flex;justify-content:space-between;align-items:center;",
         "font-family:'Inter',system-ui,sans-serif;font-size:13px;",
@@ -349,9 +366,16 @@
         grid.className = "th-dd-grid";
         n.children.forEach(function (c) {
           var item = document.createElement("a");
-          item.className = "th-dd-item" + (c.featured ? " featured" : "");
+          var hlClass = c.highlight === "dark" ? " th-dd-item--dark" : c.highlight === "gold" ? " th-dd-item--gold" : "";
+          item.className = "th-dd-item" + hlClass;
           item.href = c.href;
-          item.innerHTML = '<span class="th-dd-label">' + c.label + '</span>' + (c.desc ? '<span class="th-dd-desc">' + c.desc + '</span>' : '');
+          var thumb = c.img ? '<span class="th-dd-thumb" style="background-image:url(\'' + SERVICE_CDN + '/' + c.img + '.webp\')"></span>' : '';
+          item.innerHTML =
+            thumb +
+            '<span class="th-dd-text">' +
+              '<span class="th-dd-label">' + c.label + '</span>' +
+              (c.desc ? '<span class="th-dd-desc">' + c.desc + '</span>' : '') +
+            '</span>';
           grid.appendChild(item);
         });
         panel.appendChild(grid);
