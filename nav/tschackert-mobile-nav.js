@@ -16,7 +16,26 @@
   var NAV = [
     { label: "Startseite", href: "/" },
     { label: "Über Uns", href: "/ueber-uns" },
-    { label: "Leistungen", href: "/leistungen" },
+    {
+      label: "Leistungen",
+      href: "/leistungen",
+      children: [
+        { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", featured: true },
+        { label: "Perfekte Veneers", desc: "Hauchdünne Keramikschalen, ohne Beschleifen", href: "/leistungen/veneers" },
+        { label: "Zahnimplantate", desc: "Künstliche Wurzeln, wie eigene Zähne", href: "/leistungen/zahnimplantate" },
+        { label: "Ästhetische Kieferorthopädie", desc: "Transparente Aligner für Erwachsene", href: "/leistungen/kieferorthopaedie" },
+        { label: "CMD Funktionsdiagnostik", desc: "Bei Kopfschmerzen, Migräne, Tinnitus", href: "/leistungen/cmd" },
+        { label: "Angstpatienten", desc: "Sanfte Sedierung & Vollnarkose vor Ort", href: "/leistungen/angstpatienten" },
+        { label: "Dental Power Splint", desc: "Patentierte Aufbissschiene für Sportler", href: "/leistungen/dental-power-splint" },
+        { label: "Prophylaxe", desc: "Individuelle Zahnpflege & Vorsorge", href: "/leistungen/prophylaxe" },
+        { label: "Bleaching", desc: "Schonende Aufhellung in der Praxis", href: "/leistungen/bleaching" },
+        { label: "Zahnersatz", desc: "Aus eigenem Meisterlabor vor Ort", href: "/leistungen/zahnersatz" },
+        { label: "Parodontologie", desc: "Zahnfleischbehandlung & Recall", href: "/leistungen/parodontologie" },
+        { label: "Endodontie", desc: "Wurzelbehandlung mit 3D-Diagnostik", href: "/leistungen/endodontie" },
+        { label: "Zahnerhalt", desc: "Ihre Zähne so lange wie möglich", href: "/leistungen/zahnerhalt" },
+        { label: "Mock-up", desc: "Veneers vorab im Mund testen", href: "/leistungen/mock-up" }
+      ]
+    },
     { label: "Patientenstimmen", href: "/patientenstimmen" }
   ];
   var CTA = { label: "Kostenlose Beratung", href: "/kontakt" };
@@ -101,6 +120,113 @@
       "}",
       "#" + HEADER_ID + " .th-links a:hover{color:rgba(20,44,47,0.65)}",
       "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + " .th-links{display:none}}",
+
+      // ── DROPDOWN (desktop, hover to open) ──
+      "#" + HEADER_ID + " .th-dd{position:relative}",
+      "#" + HEADER_ID + " .th-dd-trigger{",
+        "display:inline-flex;align-items:center;gap:6px;",
+        "font-size:14px;font-weight:500;color:rgb(20,44,47);",
+        "text-decoration:none;letter-spacing:-0.005em;cursor:pointer;",
+        "transition:color 160ms ease;background:none;border:0;padding:0;",
+        "font-family:inherit;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-trigger:hover{color:rgba(20,44,47,0.65)}",
+      "#" + HEADER_ID + " .th-dd-trigger svg{",
+        "width:10px;height:10px;transition:transform 200ms ease;",
+        "opacity:0.6;",
+      "}",
+      "#" + HEADER_ID + " .th-dd:hover .th-dd-trigger svg{transform:rotate(180deg);opacity:1}",
+      "#" + HEADER_ID + " .th-dd-panel{",
+        "position:absolute;top:calc(100% + 14px);left:50%;",
+        "transform:translateX(-50%) translateY(-8px);",
+        "opacity:0;pointer-events:none;",
+        "transition:opacity 200ms ease, transform 200ms ease;",
+        "background:rgb(255,255,255);",
+        "border:1px solid rgba(20,44,47,0.06);",
+        "border-radius:14px;padding:18px;",
+        "box-shadow:0 24px 64px rgba(20,44,47,0.12), 0 4px 12px rgba(20,44,47,0.04);",
+        "width:720px;max-width:calc(100vw - 40px);",
+        "z-index:" + (Z - 1) + ";",
+      "}",
+      "#" + HEADER_ID + " .th-dd:hover .th-dd-panel{",
+        "opacity:1;pointer-events:auto;",
+        "transform:translateX(-50%) translateY(0);",
+      "}",
+      // bridge so hover doesn't break in the 14px gap
+      "#" + HEADER_ID + " .th-dd-panel::before{",
+        "content:'';position:absolute;top:-14px;left:0;right:0;height:14px;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-grid{",
+        "display:grid;grid-template-columns:1fr 1fr;gap:2px;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-item{",
+        "display:flex;flex-direction:column;gap:3px;",
+        "padding:12px 14px;border-radius:10px;",
+        "text-decoration:none;color:rgb(20,44,47);",
+        "transition:background 160ms ease;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-item:hover{background:rgb(244,240,233)}",
+      "#" + HEADER_ID + " .th-dd-item .th-dd-label{",
+        "font-family:'Geist','Inter',system-ui,sans-serif;",
+        "font-size:14px;font-weight:500;color:rgb(20,44,47);",
+        "letter-spacing:-0.015em;line-height:1.3;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-item .th-dd-desc{",
+        "font-family:'Inter',system-ui,sans-serif;",
+        "font-size:12px;color:rgb(107,99,89);",
+        "letter-spacing:-0.005em;line-height:1.4;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-item.featured{",
+        "grid-column:1 / -1;",
+        "background:rgb(20,44,47);color:rgb(240,238,233);",
+        "padding:14px 16px;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-item.featured:hover{background:rgb(8,22,24)}",
+      "#" + HEADER_ID + " .th-dd-item.featured .th-dd-label{color:rgb(240,238,233);font-size:15px}",
+      "#" + HEADER_ID + " .th-dd-item.featured .th-dd-desc{color:rgba(240,238,233,0.7)}",
+      "#" + HEADER_ID + " .th-dd-footer{",
+        "margin-top:12px;padding:12px 14px;",
+        "border-top:1px solid rgba(20,44,47,0.08);",
+        "display:flex;justify-content:space-between;align-items:center;",
+        "font-family:'Inter',system-ui,sans-serif;font-size:13px;",
+        "color:rgb(20,44,47);text-decoration:none;font-weight:500;",
+        "letter-spacing:-0.005em;",
+      "}",
+      "#" + HEADER_ID + " .th-dd-footer:hover{color:rgba(20,44,47,0.6)}",
+      "#" + HEADER_ID + " .th-dd-footer svg{width:10px;height:10px}",
+
+      // ── DRAWER ACCORDION (mobile, click to expand) ──
+      "#" + DRAWER_ID + " .th-acc{",
+        "border-bottom:1px solid rgba(20,44,47,0.08);",
+      "}",
+      "#" + DRAWER_ID + " .th-acc-trigger{",
+        "display:flex;align-items:center;justify-content:space-between;width:100%;",
+        "padding:16px 0;background:none;border:0;cursor:pointer;",
+        "font-family:'Geist','Inter',system-ui,sans-serif;font-weight:500;",
+        "font-size:18px;color:rgb(20,44,47);letter-spacing:-0.01em;",
+      "}",
+      "#" + DRAWER_ID + " .th-acc-trigger svg{",
+        "width:12px;height:12px;transition:transform 200ms ease;opacity:0.5;",
+      "}",
+      "#" + DRAWER_ID + " .th-acc.is-open .th-acc-trigger svg{transform:rotate(180deg)}",
+      "#" + DRAWER_ID + " .th-acc-body{",
+        "max-height:0;overflow:hidden;transition:max-height 320ms ease;",
+      "}",
+      "#" + DRAWER_ID + " .th-acc.is-open .th-acc-body{max-height:900px}",
+      "#" + DRAWER_ID + " .th-acc-inner{",
+        "padding:4px 0 16px;display:flex;flex-direction:column;gap:0;",
+      "}",
+      "#" + DRAWER_ID + " .th-acc-inner a{",
+        "font-size:15px;padding:10px 0 10px 14px;",
+        "border-left:2px solid rgba(20,44,47,0.08);",
+        "border-bottom:0;color:rgb(74,106,110);font-weight:400;",
+      "}",
+      "#" + DRAWER_ID + " .th-acc-inner a:hover{color:rgb(20,44,47);border-left-color:rgb(20,44,47)}",
+      "#" + DRAWER_ID + " .th-acc-inner a.acc-all{",
+        "color:rgb(20,44,47);font-weight:500;margin-top:6px;border-left-color:rgb(20,44,47);",
+      "}",
+      // Override the drawer's default <a> border so accordion items don't double-up
+      "#" + DRAWER_ID + " a.th-acc-trigger-link{border-bottom:0!important;padding-bottom:0!important;padding-top:0!important}",
 
       // Primary CTA (desktop only)
       "#" + HEADER_ID + " .th-cta{",
@@ -205,10 +331,46 @@
     var links = document.createElement("div");
     links.className = "th-links";
     NAV.forEach(function (n) {
-      var a = document.createElement("a");
-      a.href = n.href;
-      a.textContent = n.label;
-      links.appendChild(a);
+      if (n.children && n.children.length) {
+        // Dropdown wrapper
+        var dd = document.createElement("div");
+        dd.className = "th-dd";
+
+        var trigger = document.createElement("a");
+        trigger.className = "th-dd-trigger";
+        trigger.href = n.href;
+        trigger.innerHTML = n.label + '<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4.5 L6 8 L10 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        dd.appendChild(trigger);
+
+        var panel = document.createElement("div");
+        panel.className = "th-dd-panel";
+
+        var grid = document.createElement("div");
+        grid.className = "th-dd-grid";
+        n.children.forEach(function (c) {
+          var item = document.createElement("a");
+          item.className = "th-dd-item" + (c.featured ? " featured" : "");
+          item.href = c.href;
+          item.innerHTML = '<span class="th-dd-label">' + c.label + '</span>' + (c.desc ? '<span class="th-dd-desc">' + c.desc + '</span>' : '');
+          grid.appendChild(item);
+        });
+        panel.appendChild(grid);
+
+        // Footer link to all
+        var footer = document.createElement("a");
+        footer.className = "th-dd-footer";
+        footer.href = n.href;
+        footer.innerHTML = '<span>Alle Leistungen ansehen</span><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        panel.appendChild(footer);
+
+        dd.appendChild(panel);
+        links.appendChild(dd);
+      } else {
+        var a = document.createElement("a");
+        a.href = n.href;
+        a.textContent = n.label;
+        links.appendChild(a);
+      }
     });
     header.appendChild(links);
 
@@ -245,11 +407,49 @@
     drawer.appendChild(closeBtn);
 
     NAV.forEach(function (n) {
-      var a = document.createElement("a");
-      a.href = n.href;
-      a.textContent = n.label;
-      a.addEventListener("click", closeDrawer);
-      drawer.appendChild(a);
+      if (n.children && n.children.length) {
+        // Accordion (mobile)
+        var acc = document.createElement("div");
+        acc.className = "th-acc";
+
+        var trig = document.createElement("button");
+        trig.className = "th-acc-trigger";
+        trig.type = "button";
+        trig.innerHTML = '<span>' + n.label + '</span><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4.5 L6 8 L10 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        trig.addEventListener("click", function () {
+          acc.classList.toggle("is-open");
+        });
+        acc.appendChild(trig);
+
+        var body = document.createElement("div");
+        body.className = "th-acc-body";
+        var inner = document.createElement("div");
+        inner.className = "th-acc-inner";
+        n.children.forEach(function (c) {
+          var sa = document.createElement("a");
+          sa.href = c.href;
+          sa.textContent = c.label;
+          sa.addEventListener("click", closeDrawer);
+          inner.appendChild(sa);
+        });
+        // "Alle Leistungen" link at the end of accordion
+        var allLink = document.createElement("a");
+        allLink.href = n.href;
+        allLink.textContent = "Alle Leistungen ansehen →";
+        allLink.className = "acc-all";
+        allLink.addEventListener("click", closeDrawer);
+        inner.appendChild(allLink);
+        body.appendChild(inner);
+        acc.appendChild(body);
+
+        drawer.appendChild(acc);
+      } else {
+        var a = document.createElement("a");
+        a.href = n.href;
+        a.textContent = n.label;
+        a.addEventListener("click", closeDrawer);
+        drawer.appendChild(a);
+      }
     });
     var drawerCta = document.createElement("a");
     drawerCta.href = CTA.href;
