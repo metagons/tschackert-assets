@@ -22,7 +22,7 @@
   // Featured services — highlighted at top
   var FEATURED_SERVICES = [
     { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
-    { label: "Perfekte Veneers", desc: "Hauchdünne Keramik, ohne Beschleifen", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" }
+    { label: "Perfekte Veneers", desc: "Hauchdünne Keramik nach LVI-Methode", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" }
   ];
 
   // Other services — shown in grid below featured
