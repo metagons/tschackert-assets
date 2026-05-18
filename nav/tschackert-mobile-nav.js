@@ -3,91 +3,100 @@
   if (window.__tschackertHeaderInit) return;
   window.__tschackertHeaderInit = true;
 
+  // ==========================================================================
+  // Constants
+  // ==========================================================================
   var HEADER_ID = "tschackert-header";
   var BTN_ID = "tschackert-hamburger";
   var DRAWER_ID = "tschackert-drawer";
   var BACKDROP_ID = "tschackert-backdrop";
+  var MEGA_ID = "tschackert-mega";
+  var MEGA_BACKDROP_ID = "tschackert-mega-backdrop";
   var STYLE_ID = "tschackert-header-style";
   var Z = 2147483647;
   var MOBILE_BP = 860;
 
   var LOGO_URL = "https://framerusercontent.com/images/13Uiui9ACqyo6DnuT4zwgz38QdU.png?width=1176&height=281";
-
   var SERVICE_CDN = "https://cdn.jsdelivr.net/gh/metagons/tschackert-assets@main/services";
-  var NAV = [
+
+  // Featured services — highlighted at top
+  var FEATURED_SERVICES = [
+    { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
+    { label: "Perfekte Veneers", desc: "Hauchdünne Keramik, ohne Beschleifen", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" }
+  ];
+
+  // Other services — shown in grid below featured
+  var OTHER_SERVICES = [
+    { label: "Zahnimplantate", desc: "Künstliche Wurzeln", href: "/leistungen/zahnimplantate", img: "x6kw1r" },
+    { label: "Kieferorthopädie", desc: "Transparente Aligner", href: "/leistungen/kieferorthopaedie", img: "s5k2oi" },
+    { label: "CMD Funktionsdiagnostik", desc: "Migräne, Tinnitus, CMD", href: "/leistungen/cmd", img: "679tqr" },
+    { label: "Angstpatienten", desc: "Sanfte Sedierung & Narkose", href: "/leistungen/angstpatienten", img: "3d622x" },
+    { label: "Dental Power Splint", desc: "Patentierte Aufbissschiene", href: "/leistungen/dental-power-splint", img: "tmqg3w" },
+    { label: "Prophylaxe", desc: "Individuelle Vorsorge", href: "/leistungen/prophylaxe", img: "fckkaz" },
+    { label: "Bleaching", desc: "Schonende Aufhellung", href: "/leistungen/bleaching", img: "xn787w" },
+    { label: "Zahnersatz", desc: "Aus eigenem Meisterlabor", href: "/leistungen/zahnersatz", img: "e5sn6a" },
+    { label: "Parodontologie", desc: "Zahnfleischbehandlung", href: "/leistungen/parodontologie", img: "9tv28y" },
+    { label: "Endodontie", desc: "Wurzelbehandlung 3D", href: "/leistungen/endodontie", img: "xouuoy" },
+    { label: "Zahnerhalt", desc: "Substanz erhalten", href: "/leistungen/zahnerhalt", img: "pjdsmf" },
+    { label: "Mock-up", desc: "Veneers vorab testen", href: "/leistungen/mock-up", img: "t4ayby" }
+  ];
+
+  var MAIN_NAV = [
     { label: "Startseite", href: "/" },
     { label: "Über Uns", href: "/ueber-uns" },
-    {
-      label: "Leistungen",
-      href: "/leistungen",
-      children: [
-        { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
-        { label: "Perfekte Veneers", desc: "Hauchdünne Keramik, ohne Beschleifen", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" },
-        { label: "Zahnimplantate", desc: "Künstliche Wurzeln, wie eigene Zähne", href: "/leistungen/zahnimplantate", img: "x6kw1r" },
-        { label: "Ästhetische Kieferorthopädie", desc: "Transparente Aligner für Erwachsene", href: "/leistungen/kieferorthopaedie", img: "s5k2oi" },
-        { label: "CMD Funktionsdiagnostik", desc: "Bei Kopfschmerzen, Migräne, Tinnitus", href: "/leistungen/cmd", img: "679tqr" },
-        { label: "Angstpatienten", desc: "Sanfte Sedierung & Vollnarkose", href: "/leistungen/angstpatienten", img: "3d622x" },
-        { label: "Dental Power Splint", desc: "Patentierte Aufbissschiene für Sportler", href: "/leistungen/dental-power-splint", img: "tmqg3w" },
-        { label: "Prophylaxe", desc: "Individuelle Zahnpflege & Vorsorge", href: "/leistungen/prophylaxe", img: "fckkaz" },
-        { label: "Bleaching", desc: "Schonende Aufhellung in der Praxis", href: "/leistungen/bleaching", img: "xn787w" },
-        { label: "Zahnersatz", desc: "Aus eigenem Meisterlabor vor Ort", href: "/leistungen/zahnersatz", img: "e5sn6a" },
-        { label: "Parodontologie", desc: "Zahnfleischbehandlung & Recall", href: "/leistungen/parodontologie", img: "9tv28y" },
-        { label: "Endodontie", desc: "Wurzelbehandlung mit 3D-Diagnostik", href: "/leistungen/endodontie", img: "xouuoy" },
-        { label: "Zahnerhalt", desc: "Ihre Zähne so lange wie möglich", href: "/leistungen/zahnerhalt", img: "pjdsmf" },
-        { label: "Mock-up", desc: "Veneers vorab im Mund testen", href: "/leistungen/mock-up", img: "t4ayby" }
-      ]
-    },
+    { label: "Leistungen", href: "/leistungen", mega: true },
     { label: "Patientenstimmen", href: "/patientenstimmen" }
   ];
-  var CTA = { label: "Kostenlose Beratung", href: "/kontakt" };
 
+  var SECONDARY_NAV = [
+    { label: "Team", href: "/team" },
+    { label: "Medien", href: "/medien" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Kontakt", href: "/kontakt" }
+  ];
+
+  var CTA = { label: "Kostenlose Beratung", href: "/kontakt" };
+  var PHONE_TEL = "+4969283030";
+  var PHONE_DISPLAY = "+49 (0)69 28 30 30";
+  var PRAXIS_ADDR_L1 = "Goethestraße 23";
+  var PRAXIS_ADDR_L2 = "60313 Frankfurt am Main";
+  var PRAXIS_EMAIL = "praxis@tschackert.com";
+
+  // ==========================================================================
+  // Styles
+  // ==========================================================================
   function ensureStyle() {
     if (document.getElementById(STYLE_ID)) return;
     var s = document.createElement("style");
     s.id = STYLE_ID;
     s.textContent = [
       // ── HIDE Framer's built-in Headers ──
-      // Target any nav element that contains a Nav Links Wrapper (= Framer's Header).
       "nav:has([data-framer-name='Nav Links Wrapper']){display:none!important}",
-      // Also hide the wrapper container around it (covers all responsive variants).
-      // Framer renders ssr-variant wrappers; nuke their nav contents on every breakpoint.
       ".ssr-variant > div > nav:has([data-framer-name='Menu']){display:none!important}",
-      // Belt-and-braces: hide any element with data-framer-name='Header' just in case.
       "[data-framer-name='Header']{display:none!important}",
 
       // ── PUSH PAGE CONTENT BELOW OUR FIXED HEADER ──
-      // body padding-top equal to header height so content (hero, eyebrows) doesn't
-      // sit behind the fixed nav. Tracks the same heights as #tschackert-header below.
       "body{padding-top:72px!important}",
       "@media (max-width:" + MOBILE_BP + "px){body{padding-top:64px!important}}",
-      // Anchor jumps account for sticky nav.
       "html{scroll-padding-top:80px}",
 
-      // ── HIDE NAV + FABS WHEN ANY MODAL/DRAWER IS OPEN ──
-      // Detected via body overflow:hidden (universal modal-open pattern set by
-      // ServicesAssessmentGrid drawer, our menu drawer, and parking modal).
-      // Our own drawers always have role=dialog in the DOM (translated off-screen
-      // when closed), so :has() would hide the nav permanently — body inline style
-      // is the only reliable signal of an actually-open modal.
-      "body[style*='overflow: hidden'] #" + HEADER_ID + ",",
-      "body[style*='overflow:hidden'] #" + HEADER_ID + ",",
-      "body[style*='overflow: hidden'] #tschackert-fab-wrap,",
-      "body[style*='overflow:hidden'] #tschackert-fab-wrap{",
+      // ── HIDE NAV + FABS WHEN A MODAL/DRAWER IS OPEN ──
+      // Detect via body overflow:hidden so the modal's close button is accessible.
+      // Excludes our OWN drawer + mega (they set a different body class instead).
+      "body[style*='overflow: hidden']:not(.tschackert-self-open) #" + HEADER_ID + ",",
+      "body[style*='overflow:hidden']:not(.tschackert-self-open) #" + HEADER_ID + ",",
+      "body[style*='overflow: hidden']:not(.tschackert-self-open) #tschackert-fab-wrap,",
+      "body[style*='overflow:hidden']:not(.tschackert-self-open) #tschackert-fab-wrap{",
         "opacity:0!important;pointer-events:none!important;",
         "transition:opacity 200ms ease;",
       "}",
 
-      // ── MOBILE TAP-TARGET ENFORCEMENT (WCAG AAA = 44×44) ──
-      // Target our known button classes from code components. Excludes nav/FAB which
-      // are already sized correctly. Adds min-height + padding on mobile only.
+      // ── MOBILE TAP-TARGET ENFORCEMENT ──
       "@media (max-width:640px){",
         ".cta-button,.lh-primary,.ffs-button,.de-button,.bcc-button,.bfh-submit,.tr-secondary-btn,.sag-secondary-btn,.pf-arrow{",
-          "min-height:44px!important;",
-          "padding-top:12px!important;padding-bottom:12px!important;",
+          "min-height:44px!important;padding-top:12px!important;padding-bottom:12px!important;",
         "}",
-        // Framer's PrimaryButton instances (rendered via Framer canvas) — outer container has -container class
         "div[class*='-container'] > a[href]{min-height:44px;display:inline-flex;align-items:center}",
-        // Touch tap area boost for tiny icon links (eyebrow text-links etc still OK)
         "a.framer-text{min-height:auto}",
       "}",
 
@@ -111,139 +120,19 @@
       "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + " .th-logo{height:36px}}",
 
       // Center nav (desktop only)
-      "#" + HEADER_ID + " .th-links{",
-        "display:flex;gap:32px;align-items:center;",
-      "}",
-      "#" + HEADER_ID + " .th-links a{",
+      "#" + HEADER_ID + " .th-links{display:flex;gap:32px;align-items:center}",
+      "#" + HEADER_ID + " .th-links a,#" + HEADER_ID + " .th-links button{",
         "font-size:14px;font-weight:500;color:rgb(20,44,47);",
         "text-decoration:none;letter-spacing:-0.005em;",
-        "transition:color 160ms ease;",
-      "}",
-      "#" + HEADER_ID + " .th-links a:hover{color:rgba(20,44,47,0.65)}",
-      "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + " .th-links{display:none}}",
-
-      // ── DROPDOWN (desktop, hover to open) ──
-      "#" + HEADER_ID + " .th-dd{position:relative}",
-      "#" + HEADER_ID + " .th-dd-trigger{",
-        "display:inline-flex;align-items:center;gap:6px;",
-        "font-size:14px;font-weight:500;color:rgb(20,44,47);",
-        "text-decoration:none;letter-spacing:-0.005em;cursor:pointer;",
         "transition:color 160ms ease;background:none;border:0;padding:0;",
-        "font-family:inherit;",
+        "font-family:inherit;cursor:pointer;",
+        "display:inline-flex;align-items:center;gap:6px;",
       "}",
-      "#" + HEADER_ID + " .th-dd-trigger:hover{color:rgba(20,44,47,0.65)}",
-      "#" + HEADER_ID + " .th-dd-trigger svg{",
-        "width:10px;height:10px;transition:transform 200ms ease;",
-        "opacity:0.6;",
-      "}",
-      "#" + HEADER_ID + " .th-dd:hover .th-dd-trigger svg{transform:rotate(180deg);opacity:1}",
-      "#" + HEADER_ID + " .th-dd-panel{",
-        "position:absolute;top:calc(100% + 14px);left:50%;",
-        "transform:translateX(-50%) translateY(-8px);",
-        "opacity:0;pointer-events:none;",
-        "transition:opacity 200ms ease, transform 200ms ease;",
-        "background:rgb(255,255,255);",
-        "border:1px solid rgba(20,44,47,0.06);",
-        "border-radius:14px;padding:12px;",
-        "box-shadow:0 24px 64px rgba(20,44,47,0.12), 0 4px 12px rgba(20,44,47,0.04);",
-        "width:760px;max-width:calc(100vw - 40px);",
-        "z-index:" + (Z - 1) + ";",
-      "}",
-      "#" + HEADER_ID + " .th-dd:hover .th-dd-panel{",
-        "opacity:1;pointer-events:auto;",
-        "transform:translateX(-50%) translateY(0);",
-      "}",
-      // bridge so hover doesn't break in the 14px gap
-      "#" + HEADER_ID + " .th-dd-panel::before{",
-        "content:'';position:absolute;top:-14px;left:0;right:0;height:14px;",
-      "}",
-      "#" + HEADER_ID + " .th-dd-grid{",
-        "display:grid;grid-template-columns:1fr 1fr;gap:4px;",
-      "}",
-      // Biograph-style item: thumbnail + (label + desc) horizontal
-      "#" + HEADER_ID + " .th-dd-item{",
-        "display:flex;align-items:center;gap:14px;",
-        "padding:10px 12px;border-radius:10px;",
-        "text-decoration:none;color:rgb(20,44,47);",
-        "transition:background 160ms ease;min-width:0;",
-      "}",
-      "#" + HEADER_ID + " .th-dd-item:hover{background:rgb(244,240,233)}",
-      "#" + HEADER_ID + " .th-dd-thumb{",
-        "width:42px;height:42px;border-radius:8px;",
-        "background-size:cover;background-position:center;",
-        "background-color:rgb(244,240,233);",
-        "flex-shrink:0;",
-      "}",
-      "#" + HEADER_ID + " .th-dd-text{",
-        "display:flex;flex-direction:column;gap:2px;",
-        "min-width:0;flex:1;",
-      "}",
-      "#" + HEADER_ID + " .th-dd-label{",
-        "font-family:'Geist','Inter',system-ui,sans-serif;",
-        "font-size:14px;font-weight:500;",
-        "letter-spacing:-0.015em;line-height:1.25;",
-        "color:rgb(20,44,47);",
-      "}",
-      "#" + HEADER_ID + " .th-dd-desc{",
-        "font-family:'Inter',system-ui,sans-serif;",
-        "font-size:12px;color:rgb(107,99,89);",
-        "letter-spacing:-0.005em;line-height:1.4;",
-        "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;",
-      "}",
-      // ── DARK featured (Feste Zähne) ──
-      "#" + HEADER_ID + " .th-dd-item--dark{background:rgb(20,44,47)}",
-      "#" + HEADER_ID + " .th-dd-item--dark:hover{background:rgb(8,22,24)}",
-      "#" + HEADER_ID + " .th-dd-item--dark .th-dd-label{color:rgb(240,238,233)}",
-      "#" + HEADER_ID + " .th-dd-item--dark .th-dd-desc{color:rgba(240,238,233,0.72)}",
-      // ── GOLD featured (Veneers) ──
-      "#" + HEADER_ID + " .th-dd-item--gold{background:rgb(184,149,106)}",
-      "#" + HEADER_ID + " .th-dd-item--gold:hover{background:rgb(165,132,90)}",
-      "#" + HEADER_ID + " .th-dd-item--gold .th-dd-label{color:rgb(20,44,47)}",
-      "#" + HEADER_ID + " .th-dd-item--gold .th-dd-desc{color:rgba(20,44,47,0.72)}",
-
-      "#" + HEADER_ID + " .th-dd-footer{",
-        "margin-top:8px;padding:14px 14px 4px;",
-        "border-top:1px solid rgba(20,44,47,0.08);",
-        "display:flex;justify-content:space-between;align-items:center;",
-        "font-family:'Inter',system-ui,sans-serif;font-size:13px;",
-        "color:rgb(20,44,47);text-decoration:none;font-weight:500;",
-        "letter-spacing:-0.005em;",
-      "}",
-      "#" + HEADER_ID + " .th-dd-footer:hover{color:rgba(20,44,47,0.6)}",
-      "#" + HEADER_ID + " .th-dd-footer svg{width:10px;height:10px}",
-
-      // ── DRAWER ACCORDION (mobile, click to expand) ──
-      "#" + DRAWER_ID + " .th-acc{",
-        "border-bottom:1px solid rgba(20,44,47,0.08);",
-      "}",
-      "#" + DRAWER_ID + " .th-acc-trigger{",
-        "display:flex;align-items:center;justify-content:space-between;width:100%;",
-        "padding:16px 0;background:none;border:0;cursor:pointer;",
-        "font-family:'Geist','Inter',system-ui,sans-serif;font-weight:500;",
-        "font-size:18px;color:rgb(20,44,47);letter-spacing:-0.01em;",
-      "}",
-      "#" + DRAWER_ID + " .th-acc-trigger svg{",
-        "width:12px;height:12px;transition:transform 200ms ease;opacity:0.5;",
-      "}",
-      "#" + DRAWER_ID + " .th-acc.is-open .th-acc-trigger svg{transform:rotate(180deg)}",
-      "#" + DRAWER_ID + " .th-acc-body{",
-        "max-height:0;overflow:hidden;transition:max-height 320ms ease;",
-      "}",
-      "#" + DRAWER_ID + " .th-acc.is-open .th-acc-body{max-height:900px}",
-      "#" + DRAWER_ID + " .th-acc-inner{",
-        "padding:4px 0 16px;display:flex;flex-direction:column;gap:0;",
-      "}",
-      "#" + DRAWER_ID + " .th-acc-inner a{",
-        "font-size:15px;padding:10px 0 10px 14px;",
-        "border-left:2px solid rgba(20,44,47,0.08);",
-        "border-bottom:0;color:rgb(74,106,110);font-weight:400;",
-      "}",
-      "#" + DRAWER_ID + " .th-acc-inner a:hover{color:rgb(20,44,47);border-left-color:rgb(20,44,47)}",
-      "#" + DRAWER_ID + " .th-acc-inner a.acc-all{",
-        "color:rgb(20,44,47);font-weight:500;margin-top:6px;border-left-color:rgb(20,44,47);",
-      "}",
-      // Override the drawer's default <a> border so accordion items don't double-up
-      "#" + DRAWER_ID + " a.th-acc-trigger-link{border-bottom:0!important;padding-bottom:0!important;padding-top:0!important}",
+      "#" + HEADER_ID + " .th-links a:hover,#" + HEADER_ID + " .th-links button:hover{color:rgba(20,44,47,0.65)}",
+      "#" + HEADER_ID + " .th-links button svg{width:10px;height:10px;opacity:0.6;transition:transform 220ms ease}",
+      "#" + HEADER_ID + " .th-links button.is-active{color:rgba(20,44,47,0.65)}",
+      "#" + HEADER_ID + " .th-links button.is-active svg{transform:rotate(180deg);opacity:1}",
+      "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + " .th-links{display:none}}",
 
       // Primary CTA (desktop only)
       "#" + HEADER_ID + " .th-cta{",
@@ -251,8 +140,7 @@
         "background:rgb(20,44,47);color:rgb(240,238,233);",
         "padding:10px 20px;border-radius:8px;border:0;",
         "font-size:14px;font-weight:500;letter-spacing:-0.005em;",
-        "text-decoration:none;cursor:pointer;",
-        "transition:background 160ms ease;",
+        "text-decoration:none;cursor:pointer;transition:background 160ms ease;",
       "}",
       "#" + HEADER_ID + " .th-cta:hover{background:rgb(8,22,24)}",
       "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + " .th-cta{display:none}}",
@@ -269,7 +157,144 @@
       "}",
       "#" + BTN_ID + " svg{width:20px;height:20px}",
 
-      // Drawer + backdrop
+      // ════════════════════════════════════════════════════════════════════
+      // MEGA PANEL — desktop full-width Leistungen dropdown
+      // ════════════════════════════════════════════════════════════════════
+      "#" + MEGA_BACKDROP_ID + "{",
+        "position:fixed;top:72px;left:0;right:0;bottom:0;",
+        "background:rgba(20,44,47,0.35);",
+        "-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);",
+        "opacity:0;pointer-events:none;",
+        "transition:opacity 280ms ease;",
+        "z-index:" + (Z - 3) + ";",
+      "}",
+      "#" + MEGA_BACKDROP_ID + ".is-open{opacity:1;pointer-events:auto}",
+      "@media (max-width:" + MOBILE_BP + "px){#" + MEGA_BACKDROP_ID + "{display:none!important}}",
+
+      "#" + MEGA_ID + "{",
+        "position:fixed;top:72px;left:0;right:0;",
+        "background:rgb(255,255,255);",
+        "border-bottom:1px solid rgba(20,44,47,0.06);",
+        "box-shadow:0 24px 64px rgba(20,44,47,0.08);",
+        "padding:36px 60px 44px;box-sizing:border-box;",
+        "transform:translateY(-16px);opacity:0;pointer-events:none;",
+        "transition:opacity 280ms ease, transform 280ms ease;",
+        "z-index:" + (Z - 2) + ";max-height:calc(100vh - 72px);overflow-y:auto;",
+      "}",
+      "#" + MEGA_ID + ".is-open{opacity:1;pointer-events:auto;transform:translateY(0)}",
+      "@media (max-width:1100px){#" + MEGA_ID + "{padding:32px 32px 40px}}",
+      "@media (max-width:" + MOBILE_BP + "px){#" + MEGA_ID + "{display:none!important}}",
+
+      "#" + MEGA_ID + " .th-mega-inner{max-width:1280px;margin:0 auto}",
+      "#" + MEGA_ID + " .th-mega-head{",
+        "display:flex;justify-content:space-between;align-items:flex-end;gap:24px;",
+        "padding-bottom:24px;margin-bottom:24px;",
+        "border-bottom:1px solid rgba(20,44,47,0.08);",
+      "}",
+      "#" + MEGA_ID + " .th-mega-head-text{display:flex;flex-direction:column}",
+      "#" + MEGA_ID + " .th-mega-eyebrow{",
+        "font-family:'Inter',sans-serif;font-size:11px;font-weight:500;",
+        "letter-spacing:0.18em;text-transform:uppercase;color:rgb(74,106,110);",
+        "margin:0 0 8px;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-title{",
+        "font-family:'Geist','Inter',sans-serif;font-size:30px;font-weight:500;",
+        "letter-spacing:-0.025em;color:rgb(20,44,47);margin:0;line-height:1.1;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-headcta{",
+        "display:inline-flex;align-items:center;gap:8px;",
+        "background:rgb(20,44,47);color:rgb(240,238,233);",
+        "padding:13px 22px;border-radius:8px;",
+        "font-family:'Inter',sans-serif;font-size:14px;font-weight:500;",
+        "letter-spacing:-0.005em;text-decoration:none;",
+        "transition:background 160ms ease;flex-shrink:0;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-headcta:hover{background:rgb(8,22,24)}",
+      "#" + MEGA_ID + " .th-mega-headcta svg{width:12px;height:12px}",
+
+      // Featured row (2 big tiles)
+      "#" + MEGA_ID + " .th-mega-featured{",
+        "display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile{",
+        "position:relative;display:flex;flex-direction:column;justify-content:flex-end;",
+        "min-height:220px;padding:26px;border-radius:14px;overflow:hidden;",
+        "text-decoration:none;color:inherit;transition:transform 280ms ease;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile:hover{transform:translateY(-3px)}",
+      "#" + MEGA_ID + " .th-mega-tile-bg{",
+        "position:absolute;inset:0;background-size:cover;background-position:center;",
+        "opacity:0.22;transition:opacity 320ms ease;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile:hover .th-mega-tile-bg{opacity:0.32}",
+      "#" + MEGA_ID + " .th-mega-tile-content{position:relative;z-index:1}",
+      "#" + MEGA_ID + " .th-mega-tile-eyebrow{",
+        "font-family:'Inter',sans-serif;font-size:11px;font-weight:500;",
+        "letter-spacing:0.18em;text-transform:uppercase;margin:0 0 10px;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile-title{",
+        "font-family:'Geist','Inter',sans-serif;font-size:24px;font-weight:500;",
+        "letter-spacing:-0.02em;line-height:1.15;margin:0 0 8px;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile-desc{",
+        "font-family:'Inter',sans-serif;font-size:14px;line-height:1.45;",
+        "letter-spacing:-0.005em;margin:0;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile-arrow{",
+        "position:absolute;top:24px;right:24px;",
+        "width:36px;height:36px;border-radius:50%;",
+        "display:flex;align-items:center;justify-content:center;z-index:1;",
+        "transition:transform 280ms ease;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile:hover .th-mega-tile-arrow{transform:translate(2px,-2px)}",
+      "#" + MEGA_ID + " .th-mega-tile-arrow svg{width:14px;height:14px}",
+      // Dark variant
+      "#" + MEGA_ID + " .th-mega-tile--dark{background:rgb(20,44,47);color:rgb(240,238,233)}",
+      "#" + MEGA_ID + " .th-mega-tile--dark .th-mega-tile-eyebrow{color:rgba(240,238,233,0.6)}",
+      "#" + MEGA_ID + " .th-mega-tile--dark .th-mega-tile-desc{color:rgba(240,238,233,0.78)}",
+      "#" + MEGA_ID + " .th-mega-tile--dark .th-mega-tile-arrow{background:rgba(255,255,255,0.14);color:rgb(240,238,233)}",
+      // Gold variant
+      "#" + MEGA_ID + " .th-mega-tile--gold{background:rgb(184,149,106);color:rgb(20,44,47)}",
+      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-eyebrow{color:rgba(20,44,47,0.6)}",
+      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-desc{color:rgba(20,44,47,0.78)}",
+      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-arrow{background:rgba(20,44,47,0.14);color:rgb(20,44,47)}",
+
+      // Other services
+      "#" + MEGA_ID + " .th-mega-others-label{",
+        "font-family:'Inter',sans-serif;font-size:11px;font-weight:500;",
+        "letter-spacing:0.18em;text-transform:uppercase;color:rgb(74,106,110);",
+        "margin:0 0 16px;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-grid{",
+        "display:grid;grid-template-columns:repeat(3,1fr);gap:4px;",
+      "}",
+      "@media (max-width:1100px){#" + MEGA_ID + " .th-mega-grid{grid-template-columns:repeat(2,1fr)}}",
+      "#" + MEGA_ID + " .th-mega-item{",
+        "display:flex;align-items:center;gap:14px;",
+        "padding:10px 12px;border-radius:10px;",
+        "text-decoration:none;color:rgb(20,44,47);",
+        "transition:background 160ms ease;min-width:0;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-item:hover{background:rgb(244,240,233)}",
+      "#" + MEGA_ID + " .th-mega-thumb{",
+        "width:40px;height:40px;border-radius:8px;",
+        "background-size:cover;background-position:center;",
+        "background-color:rgb(244,240,233);flex-shrink:0;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}",
+      "#" + MEGA_ID + " .th-mega-label{",
+        "font-family:'Geist','Inter',sans-serif;font-size:14px;font-weight:500;",
+        "color:rgb(20,44,47);letter-spacing:-0.015em;line-height:1.25;",
+      "}",
+      "#" + MEGA_ID + " .th-mega-desc{",
+        "font-family:'Inter',sans-serif;font-size:12px;",
+        "color:rgb(107,99,89);letter-spacing:-0.005em;line-height:1.4;",
+        "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;",
+      "}",
+
+      // ════════════════════════════════════════════════════════════════════
+      // MOBILE DRAWER — Biograph-style full-page menu
+      // ════════════════════════════════════════════════════════════════════
       "#" + BACKDROP_ID + "{",
         "position:fixed;top:0;right:0;bottom:0;left:0;z-index:" + (Z - 2) + ";",
         "background:rgba(20,44,47,0.4);",
@@ -277,46 +302,389 @@
         "opacity:0;pointer-events:none;transition:opacity 220ms ease;",
       "}",
       "#" + BACKDROP_ID + ".is-open{opacity:1;pointer-events:auto}",
+
       "#" + DRAWER_ID + "{",
-        "position:fixed;top:0;right:0;bottom:0;width:88%;max-width:340px;",
-        "z-index:" + (Z - 1) + ";background:rgb(255,255,255);",
-        "transform:translateX(100%);transition:transform 280ms cubic-bezier(.16,1,.3,1);",
+        "position:fixed;top:0;right:0;bottom:0;width:100%;max-width:480px;",
+        "z-index:" + (Z - 1) + ";background:rgb(250,249,247);",
+        "transform:translateX(100%);transition:transform 320ms cubic-bezier(.16,1,.3,1);",
         "box-shadow:-20px 0 40px rgba(20,44,47,0.1);",
-        "padding:80px 32px 32px;display:flex;flex-direction:column;",
-        "box-sizing:border-box;",
+        "display:flex;flex-direction:column;box-sizing:border-box;",
+        "overflow-y:auto;",
       "}",
       "#" + DRAWER_ID + ".is-open{transform:translateX(0)}",
-      "#" + DRAWER_ID + " a{",
-        "font-family:'Geist','Inter',system-ui,sans-serif;font-weight:500;",
+
+      "#" + DRAWER_ID + " .th-d-head{",
+        "display:flex;justify-content:space-between;align-items:center;",
+        "padding:18px 22px;border-bottom:1px solid rgba(20,44,47,0.08);",
+        "position:sticky;top:0;background:rgba(250,249,247,0.96);",
+        "-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:2;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-logo img{height:30px;width:auto;display:block}",
+      "#" + DRAWER_ID + " .th-d-close{",
+        "width:40px;height:40px;border-radius:8px;",
+        "background:rgba(20,44,47,0.06);border:0;cursor:pointer;",
+        "display:flex;align-items:center;justify-content:center;",
+        "color:rgb(20,44,47);padding:0;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-close svg{width:16px;height:16px}",
+
+      "#" + DRAWER_ID + " .th-d-body{padding:20px 22px 40px;display:flex;flex-direction:column;gap:24px}",
+
+      // Top CTAs row
+      "#" + DRAWER_ID + " .th-d-ctas{display:grid;grid-template-columns:1fr 1.6fr;gap:10px}",
+      "#" + DRAWER_ID + " .th-d-cta-phone,#" + DRAWER_ID + " .th-d-cta-primary{",
+        "display:inline-flex;align-items:center;justify-content:center;gap:8px;",
+        "padding:14px 16px;border-radius:10px;min-height:48px;box-sizing:border-box;",
+        "font-family:'Inter',sans-serif;font-size:14px;font-weight:500;",
+        "letter-spacing:-0.005em;text-decoration:none;cursor:pointer;",
+        "transition:background 160ms ease;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-cta-phone{",
+        "background:rgba(20,44,47,0.06);color:rgb(20,44,47);",
+        "border:1px solid rgba(20,44,47,0.1);",
+      "}",
+      "#" + DRAWER_ID + " .th-d-cta-phone:hover{background:rgba(20,44,47,0.1)}",
+      "#" + DRAWER_ID + " .th-d-cta-primary{background:rgb(20,44,47);color:rgb(240,238,233)}",
+      "#" + DRAWER_ID + " .th-d-cta-primary:hover{background:rgb(8,22,24)}",
+      "#" + DRAWER_ID + " .th-d-cta-phone svg,#" + DRAWER_ID + " .th-d-cta-primary svg{width:14px;height:14px}",
+
+      // Featured tiles
+      "#" + DRAWER_ID + " .th-d-featured{display:flex;flex-direction:column;gap:10px}",
+      "#" + DRAWER_ID + " .th-d-tile{",
+        "position:relative;display:flex;align-items:center;gap:14px;",
+        "padding:16px 18px;border-radius:12px;text-decoration:none;color:inherit;",
+        "overflow:hidden;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-tile-thumb{",
+        "width:52px;height:52px;border-radius:8px;",
+        "background-size:cover;background-position:center;flex-shrink:0;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-tile-text{flex:1;min-width:0}",
+      "#" + DRAWER_ID + " .th-d-tile-label{",
+        "font-family:'Geist','Inter',sans-serif;font-size:16px;font-weight:500;",
+        "letter-spacing:-0.015em;line-height:1.25;margin-bottom:3px;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-tile-desc{",
+        "font-family:'Inter',sans-serif;font-size:12px;line-height:1.4;",
+        "letter-spacing:-0.005em;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-tile-arrow{",
+        "width:28px;height:28px;border-radius:50%;",
+        "display:flex;align-items:center;justify-content:center;flex-shrink:0;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-tile-arrow svg{width:12px;height:12px}",
+      // Dark
+      "#" + DRAWER_ID + " .th-d-tile--dark{background:rgb(20,44,47);color:rgb(240,238,233)}",
+      "#" + DRAWER_ID + " .th-d-tile--dark .th-d-tile-desc{color:rgba(240,238,233,0.72)}",
+      "#" + DRAWER_ID + " .th-d-tile--dark .th-d-tile-arrow{background:rgba(255,255,255,0.14);color:rgb(240,238,233)}",
+      // Gold
+      "#" + DRAWER_ID + " .th-d-tile--gold{background:rgb(184,149,106);color:rgb(20,44,47)}",
+      "#" + DRAWER_ID + " .th-d-tile--gold .th-d-tile-desc{color:rgba(20,44,47,0.72)}",
+      "#" + DRAWER_ID + " .th-d-tile--gold .th-d-tile-arrow{background:rgba(20,44,47,0.14);color:rgb(20,44,47)}",
+
+      // Section labels
+      "#" + DRAWER_ID + " .th-d-sec-label{",
+        "font-family:'Inter',sans-serif;font-size:11px;font-weight:500;",
+        "letter-spacing:0.18em;text-transform:uppercase;color:rgb(74,106,110);",
+        "margin:0 0 4px;",
+      "}",
+
+      // Primary nav
+      "#" + DRAWER_ID + " .th-d-main{display:flex;flex-direction:column;gap:0}",
+      "#" + DRAWER_ID + " .th-d-main a{",
+        "display:flex;justify-content:space-between;align-items:center;",
+        "padding:14px 0;border-bottom:1px solid rgba(20,44,47,0.08);",
+        "font-family:'Geist','Inter',sans-serif;font-weight:500;",
         "font-size:18px;color:rgb(20,44,47);text-decoration:none;",
-        "padding:16px 0;border-bottom:1px solid rgba(20,44,47,0.08);",
-        "transition:color 160ms ease;letter-spacing:-0.01em;",
+        "letter-spacing:-0.01em;transition:color 160ms ease;",
       "}",
-      "#" + DRAWER_ID + " a:hover{color:rgba(20,44,47,0.7)}",
-      "#" + DRAWER_ID + " a.primary{",
-        "margin-top:24px;background:rgb(20,44,47);color:rgb(240,238,233);",
-        "padding:18px 24px;border-radius:8px;text-align:center;border:none;",
-        "font-weight:600;font-size:16px;",
+      "#" + DRAWER_ID + " .th-d-main a:hover{color:rgba(20,44,47,0.6)}",
+      "#" + DRAWER_ID + " .th-d-main a svg{width:12px;height:12px;opacity:0.4}",
+
+      // Services list (2 cols)
+      "#" + DRAWER_ID + " .th-d-services{",
+        "display:grid;grid-template-columns:1fr 1fr;gap:0 18px;",
       "}",
-      "#" + DRAWER_ID + " a.primary:hover{background:rgb(8,22,24);color:rgb(240,238,233)}",
-      "#" + DRAWER_ID + " .close{",
-        "position:absolute;top:18px;right:18px;width:44px;height:44px;",
-        "border-radius:8px;background:rgba(20,44,47,0.06);border:0;",
-        "cursor:pointer;display:flex;align-items:center;justify-content:center;",
-        "padding:0;color:rgb(20,44,47);",
+      "#" + DRAWER_ID + " .th-d-services a{",
+        "padding:11px 0;border-bottom:1px solid rgba(20,44,47,0.06);",
+        "font-family:'Inter',sans-serif;font-size:14px;font-weight:400;",
+        "color:rgb(20,44,47);text-decoration:none;letter-spacing:-0.005em;",
+        "transition:color 160ms ease;",
       "}",
-      "#" + DRAWER_ID + " .close svg{width:18px;height:18px}",
+      "#" + DRAWER_ID + " .th-d-services a:hover{color:rgba(20,44,47,0.55)}",
+      "#" + DRAWER_ID + " .th-d-allservices{",
+        "margin-top:10px;display:inline-flex;align-items:center;gap:8px;",
+        "font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;",
+        "color:rgb(20,44,47);text-decoration:none;",
+        "padding:10px 0;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-allservices svg{width:11px;height:11px}",
+
+      // Secondary nav (2 cols small)
+      "#" + DRAWER_ID + " .th-d-secondary{",
+        "display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-secondary a{",
+        "padding:8px 0;",
+        "font-family:'Inter',sans-serif;font-size:14px;color:rgb(74,106,110);",
+        "text-decoration:none;letter-spacing:-0.005em;",
+        "transition:color 160ms ease;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-secondary a:hover{color:rgb(20,44,47)}",
+
+      // Contact info footer
+      "#" + DRAWER_ID + " .th-d-contact{",
+        "padding-top:20px;border-top:1px solid rgba(20,44,47,0.08);",
+        "display:flex;flex-direction:column;gap:4px;",
+        "font-family:'Inter',sans-serif;font-size:13px;line-height:1.6;",
+        "color:rgb(107,99,89);letter-spacing:-0.005em;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-contact a{color:rgb(74,106,110);text-decoration:none}",
+      "#" + DRAWER_ID + " .th-d-contact a:hover{color:rgb(20,44,47)}",
     ].join("");
     document.head.appendChild(s);
   }
 
+  // ==========================================================================
+  // State + element refs
+  // ==========================================================================
   var header, btn, drawer, backdrop;
+  var megaPanel, megaBackdrop, leistungenTrigger;
+
+  // ==========================================================================
+  // Mega panel (desktop)
+  // ==========================================================================
+  function buildMegaPanel() {
+    megaBackdrop = document.createElement("div");
+    megaBackdrop.id = MEGA_BACKDROP_ID;
+    megaBackdrop.addEventListener("click", closeMega);
+
+    megaPanel = document.createElement("div");
+    megaPanel.id = MEGA_ID;
+    megaPanel.setAttribute("role", "menu");
+    megaPanel.setAttribute("aria-label", "Unsere Leistungen");
+
+    var inner = document.createElement("div");
+    inner.className = "th-mega-inner";
+
+    // Head
+    var head = document.createElement("div");
+    head.className = "th-mega-head";
+    var headText = document.createElement("div");
+    headText.className = "th-mega-head-text";
+    headText.innerHTML =
+      '<p class="th-mega-eyebrow">Unsere Leistungen</p>' +
+      '<h2 class="th-mega-title">Vierzehn Spezialgebiete. Eine Praxis.</h2>';
+    head.appendChild(headText);
+
+    var headCta = document.createElement("a");
+    headCta.className = "th-mega-headcta";
+    headCta.href = CTA.href;
+    headCta.innerHTML = CTA.label + '<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    head.appendChild(headCta);
+    inner.appendChild(head);
+
+    // Featured row (2 large tiles)
+    var featured = document.createElement("div");
+    featured.className = "th-mega-featured";
+    FEATURED_SERVICES.forEach(function (s) {
+      var tile = document.createElement("a");
+      tile.className = "th-mega-tile th-mega-tile--" + s.highlight;
+      tile.href = s.href;
+      tile.innerHTML =
+        '<div class="th-mega-tile-bg" style="background-image:url(\'' + SERVICE_CDN + '/' + s.img + '.webp\')"></div>' +
+        '<div class="th-mega-tile-arrow"><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7 L12 7 M8 3 L12 7 L8 11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+        '<div class="th-mega-tile-content">' +
+          '<p class="th-mega-tile-eyebrow">' + (s.highlight === "dark" ? "Unsere Spezialität" : "Premium Ästhetik") + '</p>' +
+          '<h3 class="th-mega-tile-title">' + s.label + '</h3>' +
+          '<p class="th-mega-tile-desc">' + s.desc + '</p>' +
+        '</div>';
+      featured.appendChild(tile);
+    });
+    inner.appendChild(featured);
+
+    // Others label + grid
+    var othersLabel = document.createElement("p");
+    othersLabel.className = "th-mega-others-label";
+    othersLabel.textContent = "Weitere Leistungen";
+    inner.appendChild(othersLabel);
+
+    var grid = document.createElement("div");
+    grid.className = "th-mega-grid";
+    OTHER_SERVICES.forEach(function (s) {
+      var item = document.createElement("a");
+      item.className = "th-mega-item";
+      item.href = s.href;
+      item.innerHTML =
+        '<span class="th-mega-thumb" style="background-image:url(\'' + SERVICE_CDN + '/' + s.img + '.webp\')"></span>' +
+        '<span class="th-mega-text">' +
+          '<span class="th-mega-label">' + s.label + '</span>' +
+          '<span class="th-mega-desc">' + s.desc + '</span>' +
+        '</span>';
+      grid.appendChild(item);
+    });
+    inner.appendChild(grid);
+
+    megaPanel.appendChild(inner);
+  }
+
+  function openMega() {
+    if (!megaPanel) return;
+    megaPanel.classList.add("is-open");
+    megaBackdrop.classList.add("is-open");
+    if (leistungenTrigger) leistungenTrigger.classList.add("is-active");
+  }
+
+  function closeMega() {
+    if (!megaPanel) return;
+    megaPanel.classList.remove("is-open");
+    megaBackdrop.classList.remove("is-open");
+    if (leistungenTrigger) leistungenTrigger.classList.remove("is-active");
+  }
+
+  // ==========================================================================
+  // Mobile drawer
+  // ==========================================================================
+  function buildDrawerContent() {
+    var head = document.createElement("div");
+    head.className = "th-d-head";
+
+    var headLogo = document.createElement("a");
+    headLogo.href = "/";
+    headLogo.className = "th-d-logo";
+    headLogo.setAttribute("aria-label", "Dr. Tschackert");
+    headLogo.addEventListener("click", closeDrawer);
+    var img = document.createElement("img");
+    img.src = LOGO_URL;
+    img.alt = "Dr. Tschackert";
+    headLogo.appendChild(img);
+    head.appendChild(headLogo);
+
+    var closeBtn = document.createElement("button");
+    closeBtn.className = "th-d-close";
+    closeBtn.type = "button";
+    closeBtn.setAttribute("aria-label", "Menü schließen");
+    closeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    closeBtn.addEventListener("click", closeDrawer);
+    head.appendChild(closeBtn);
+
+    drawer.appendChild(head);
+
+    var body = document.createElement("div");
+    body.className = "th-d-body";
+
+    // CTAs
+    var ctas = document.createElement("div");
+    ctas.className = "th-d-ctas";
+    var phoneBtn = document.createElement("a");
+    phoneBtn.className = "th-d-cta-phone";
+    phoneBtn.href = "tel:" + PHONE_TEL;
+    phoneBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.34 1.9.66 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.54 2.81.66A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Anrufen</span>';
+    ctas.appendChild(phoneBtn);
+    var primaryCta = document.createElement("a");
+    primaryCta.className = "th-d-cta-primary";
+    primaryCta.href = CTA.href;
+    primaryCta.textContent = CTA.label;
+    primaryCta.addEventListener("click", closeDrawer);
+    ctas.appendChild(primaryCta);
+    body.appendChild(ctas);
+
+    // Featured tiles
+    var featured = document.createElement("div");
+    featured.className = "th-d-featured";
+    FEATURED_SERVICES.forEach(function (s) {
+      var tile = document.createElement("a");
+      tile.className = "th-d-tile th-d-tile--" + s.highlight;
+      tile.href = s.href;
+      tile.addEventListener("click", closeDrawer);
+      tile.innerHTML =
+        '<span class="th-d-tile-thumb" style="background-image:url(\'' + SERVICE_CDN + '/' + s.img + '.webp\')"></span>' +
+        '<span class="th-d-tile-text">' +
+          '<span class="th-d-tile-label">' + s.label + '</span>' +
+          '<span class="th-d-tile-desc">' + s.desc + '</span>' +
+        '</span>' +
+        '<span class="th-d-tile-arrow"><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7 L12 7 M8 3 L12 7 L8 11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+      featured.appendChild(tile);
+    });
+    body.appendChild(featured);
+
+    // Main nav section
+    var mainLabel = document.createElement("p");
+    mainLabel.className = "th-d-sec-label";
+    mainLabel.textContent = "Navigation";
+    body.appendChild(mainLabel);
+
+    var main = document.createElement("div");
+    main.className = "th-d-main";
+    MAIN_NAV.forEach(function (n) {
+      var a = document.createElement("a");
+      a.href = n.href;
+      a.innerHTML = '<span>' + n.label + '</span><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      a.addEventListener("click", closeDrawer);
+      main.appendChild(a);
+    });
+    body.appendChild(main);
+
+    // Other services section
+    var svcLabel = document.createElement("p");
+    svcLabel.className = "th-d-sec-label";
+    svcLabel.textContent = "Alle Leistungen";
+    body.appendChild(svcLabel);
+
+    var services = document.createElement("div");
+    services.className = "th-d-services";
+    OTHER_SERVICES.forEach(function (s) {
+      var a = document.createElement("a");
+      a.href = s.href;
+      a.textContent = s.label;
+      a.addEventListener("click", closeDrawer);
+      services.appendChild(a);
+    });
+    body.appendChild(services);
+
+    var allLink = document.createElement("a");
+    allLink.className = "th-d-allservices";
+    allLink.href = "/leistungen";
+    allLink.innerHTML = '<span>Alle Leistungen ansehen</span><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    allLink.addEventListener("click", closeDrawer);
+    body.appendChild(allLink);
+
+    // Secondary nav
+    var secLabel = document.createElement("p");
+    secLabel.className = "th-d-sec-label";
+    secLabel.textContent = "Mehr";
+    body.appendChild(secLabel);
+
+    var secondary = document.createElement("div");
+    secondary.className = "th-d-secondary";
+    SECONDARY_NAV.forEach(function (n) {
+      var a = document.createElement("a");
+      a.href = n.href;
+      a.textContent = n.label;
+      a.addEventListener("click", closeDrawer);
+      secondary.appendChild(a);
+    });
+    body.appendChild(secondary);
+
+    // Contact footer
+    var contact = document.createElement("div");
+    contact.className = "th-d-contact";
+    contact.innerHTML =
+      '<div>' + PRAXIS_ADDR_L1 + '</div>' +
+      '<div>' + PRAXIS_ADDR_L2 + '</div>' +
+      '<div><a href="tel:' + PHONE_TEL + '">' + PHONE_DISPLAY + '</a></div>' +
+      '<div><a href="mailto:' + PRAXIS_EMAIL + '">' + PRAXIS_EMAIL + '</a></div>';
+    body.appendChild(contact);
+
+    drawer.appendChild(body);
+  }
 
   function openDrawer() {
     if (!drawer) return;
     drawer.classList.add("is-open");
     backdrop.classList.add("is-open");
     btn.setAttribute("aria-expanded", "true");
+    document.body.classList.add("tschackert-self-open");
     document.body.style.overflow = "hidden";
   }
 
@@ -325,9 +693,13 @@
     drawer.classList.remove("is-open");
     backdrop.classList.remove("is-open");
     btn.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("tschackert-self-open");
     document.body.style.overflow = "";
   }
 
+  // ==========================================================================
+  // Build the header + drawer + mega panel
+  // ==========================================================================
   function build() {
     if (document.getElementById(HEADER_ID)) return;
 
@@ -335,6 +707,7 @@
     header.id = HEADER_ID;
     header.setAttribute("aria-label", "Hauptnavigation");
 
+    // Logo
     var logoLink = document.createElement("a");
     logoLink.href = "/";
     logoLink.className = "th-logo";
@@ -345,50 +718,23 @@
     logoLink.appendChild(logoImg);
     header.appendChild(logoLink);
 
+    // Desktop nav links
     var links = document.createElement("div");
     links.className = "th-links";
-    NAV.forEach(function (n) {
-      if (n.children && n.children.length) {
-        // Dropdown wrapper
-        var dd = document.createElement("div");
-        dd.className = "th-dd";
-
-        var trigger = document.createElement("a");
-        trigger.className = "th-dd-trigger";
-        trigger.href = n.href;
+    MAIN_NAV.forEach(function (n) {
+      if (n.mega) {
+        var trigger = document.createElement("button");
+        trigger.type = "button";
+        trigger.setAttribute("aria-haspopup", "true");
+        trigger.setAttribute("aria-expanded", "false");
         trigger.innerHTML = n.label + '<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4.5 L6 8 L10 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        dd.appendChild(trigger);
-
-        var panel = document.createElement("div");
-        panel.className = "th-dd-panel";
-
-        var grid = document.createElement("div");
-        grid.className = "th-dd-grid";
-        n.children.forEach(function (c) {
-          var item = document.createElement("a");
-          var hlClass = c.highlight === "dark" ? " th-dd-item--dark" : c.highlight === "gold" ? " th-dd-item--gold" : "";
-          item.className = "th-dd-item" + hlClass;
-          item.href = c.href;
-          var thumb = c.img ? '<span class="th-dd-thumb" style="background-image:url(\'' + SERVICE_CDN + '/' + c.img + '.webp\')"></span>' : '';
-          item.innerHTML =
-            thumb +
-            '<span class="th-dd-text">' +
-              '<span class="th-dd-label">' + c.label + '</span>' +
-              (c.desc ? '<span class="th-dd-desc">' + c.desc + '</span>' : '') +
-            '</span>';
-          grid.appendChild(item);
+        trigger.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (megaPanel.classList.contains("is-open")) closeMega();
+          else openMega();
         });
-        panel.appendChild(grid);
-
-        // Footer link to all
-        var footer = document.createElement("a");
-        footer.className = "th-dd-footer";
-        footer.href = n.href;
-        footer.innerHTML = '<span>Alle Leistungen ansehen</span><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        panel.appendChild(footer);
-
-        dd.appendChild(panel);
-        links.appendChild(dd);
+        leistungenTrigger = trigger;
+        links.appendChild(trigger);
       } else {
         var a = document.createElement("a");
         a.href = n.href;
@@ -398,22 +744,27 @@
     });
     header.appendChild(links);
 
+    // CTA (desktop)
     var cta = document.createElement("a");
     cta.className = "th-cta";
     cta.href = CTA.href;
     cta.textContent = CTA.label;
     header.appendChild(cta);
 
+    // Hamburger (mobile)
     btn = document.createElement("button");
     btn.id = BTN_ID;
+    btn.type = "button";
     btn.setAttribute("aria-label", "Menü öffnen");
     btn.setAttribute("aria-expanded", "false");
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
     btn.addEventListener("click", function () {
-      if (drawer.classList.contains("is-open")) closeDrawer(); else openDrawer();
+      if (drawer.classList.contains("is-open")) closeDrawer();
+      else openDrawer();
     });
     header.appendChild(btn);
 
+    // Backdrop + drawer
     backdrop = document.createElement("div");
     backdrop.id = BACKDROP_ID;
     backdrop.addEventListener("click", closeDrawer);
@@ -422,81 +773,28 @@
     drawer.id = DRAWER_ID;
     drawer.setAttribute("role", "dialog");
     drawer.setAttribute("aria-modal", "true");
+    buildDrawerContent();
 
-    var closeBtn = document.createElement("button");
-    closeBtn.className = "close";
-    closeBtn.setAttribute("aria-label", "Menü schließen");
-    closeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-    closeBtn.addEventListener("click", closeDrawer);
-    drawer.appendChild(closeBtn);
+    // Mega panel (desktop)
+    buildMegaPanel();
 
-    NAV.forEach(function (n) {
-      if (n.children && n.children.length) {
-        // Accordion (mobile)
-        var acc = document.createElement("div");
-        acc.className = "th-acc";
-
-        var trig = document.createElement("button");
-        trig.className = "th-acc-trigger";
-        trig.type = "button";
-        trig.innerHTML = '<span>' + n.label + '</span><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4.5 L6 8 L10 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        trig.addEventListener("click", function () {
-          acc.classList.toggle("is-open");
-        });
-        acc.appendChild(trig);
-
-        var body = document.createElement("div");
-        body.className = "th-acc-body";
-        var inner = document.createElement("div");
-        inner.className = "th-acc-inner";
-        n.children.forEach(function (c) {
-          var sa = document.createElement("a");
-          sa.href = c.href;
-          sa.textContent = c.label;
-          sa.addEventListener("click", closeDrawer);
-          inner.appendChild(sa);
-        });
-        // "Alle Leistungen" link at the end of accordion
-        var allLink = document.createElement("a");
-        allLink.href = n.href;
-        allLink.textContent = "Alle Leistungen ansehen →";
-        allLink.className = "acc-all";
-        allLink.addEventListener("click", closeDrawer);
-        inner.appendChild(allLink);
-        body.appendChild(inner);
-        acc.appendChild(body);
-
-        drawer.appendChild(acc);
-      } else {
-        var a = document.createElement("a");
-        a.href = n.href;
-        a.textContent = n.label;
-        a.addEventListener("click", closeDrawer);
-        drawer.appendChild(a);
-      }
-    });
-    var drawerCta = document.createElement("a");
-    drawerCta.href = CTA.href;
-    drawerCta.textContent = CTA.label;
-    drawerCta.className = "primary";
-    drawerCta.addEventListener("click", closeDrawer);
-    drawer.appendChild(drawerCta);
-
+    // Append
     document.body.appendChild(backdrop);
     document.body.appendChild(drawer);
     document.body.appendChild(header);
+    document.body.appendChild(megaBackdrop);
+    document.body.appendChild(megaPanel);
   }
 
-  // ============================================================================
-  // Floating Action Buttons (Phone + Parkhäuser)
-  // ============================================================================
+  // ==========================================================================
+  // FAB system (Phone + Parkhäuser)
+  // ==========================================================================
   var FAB_WRAP_ID = "tschackert-fab-wrap";
   var FAB_MODAL_ID = "tschackert-fab-modal";
   var FAB_MODAL_BACKDROP_ID = "tschackert-fab-modal-backdrop";
 
   var PRAXIS_ADDR = "Goethestraße 23, 60313 Frankfurt am Main";
   var PRAXIS_DIRECTIONS = "https://www.google.com/maps/dir/?api=1&destination=Goethestra%C3%9Fe+23+60313+Frankfurt";
-  var PHONE_TEL = "+4969283030";
 
   var PARKHAEUSER = [
     { name: "Parkhaus Goetheplatz", address: "Goetheplatz 2A", walkingTime: "1 Min. zu Fuß", url: "https://www.google.com/maps/dir/?api=1&origin=Parkhaus+Goetheplatz+Frankfurt&destination=Goethestra%C3%9Fe+23+60313+Frankfurt" },
@@ -504,7 +802,7 @@
     { name: "Parkhaus Börse", address: "Börsenstraße", walkingTime: "3 Min. zu Fuß", url: "https://www.google.com/maps/dir/?api=1&origin=Parkhaus+B%C3%B6rse+Frankfurt&destination=Goethestra%C3%9Fe+23+60313+Frankfurt" },
     { name: "Parkhaus Alte Oper", address: "Opernplatz", walkingTime: "4 Min. zu Fuß", url: "https://www.google.com/maps/dir/?api=1&origin=Parkhaus+Alte+Oper+Frankfurt&destination=Goethestra%C3%9Fe+23+60313+Frankfurt" },
     { name: "Q-Park Opernplatz", address: "Opernplatz", walkingTime: "4 Min. zu Fuß", url: "https://www.google.com/maps/dir/?api=1&origin=Q-Park+Opernplatz+Frankfurt&destination=Goethestra%C3%9Fe+23+60313+Frankfurt" },
-    { name: "Hauptwache Car Park", address: "Kornmarkt 10", walkingTime: "5 Min. zu Fuß", url: "https://www.google.com/maps/dir/?api=1&origin=Hauptwache+Car+Park+Frankfurt&destination=Goethestra%C3%9Fe+23+60313+Frankfurt" },
+    { name: "Hauptwache Car Park", address: "Kornmarkt 10", walkingTime: "5 Min. zu Fuß", url: "https://www.google.com/maps/dir/?api=1&origin=Hauptwache+Car+Park+Frankfurt&destination=Goethestra%C3%9Fe+23+60313+Frankfurt" }
   ];
 
   function ensureFabStyle() {
@@ -546,8 +844,6 @@
         "#" + FAB_WRAP_ID + " a, #" + FAB_WRAP_ID + " button{width:52px;height:52px}",
         "#" + FAB_WRAP_ID + " svg{width:20px;height:20px}",
       "}",
-
-      // Modal
       "#" + FAB_MODAL_BACKDROP_ID + "{",
         "position:fixed;inset:0;z-index:" + (Z - 4) + ";",
         "background:rgba(20,44,47,0.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);",
@@ -623,7 +919,7 @@
         "cursor:pointer;display:flex;align-items:center;justify-content:center;",
         "padding:0;color:rgb(20,44,47);",
       "}",
-      "#" + FAB_MODAL_ID + " .fabm-close svg{width:18px;height:18px}",
+      "#" + FAB_MODAL_ID + " .fabm-close svg{width:18px;height:18px}"
     ].join("");
     document.head.appendChild(s);
   }
@@ -764,6 +1060,9 @@
     }, { passive: true });
   }
 
+  // ==========================================================================
+  // Init + lifecycle
+  // ==========================================================================
   function init() {
     ensureStyle();
     ensureFabStyle();
@@ -772,8 +1071,10 @@
     setupFabScrollHide();
   }
 
+  // Close mega/drawer on ESC
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
+    if (megaPanel && megaPanel.classList.contains("is-open")) closeMega();
     if (drawer && drawer.classList.contains("is-open")) closeDrawer();
     if (fabModalBackdrop && fabModalBackdrop.classList.contains("is-open")) closeFabModal();
   });
@@ -784,15 +1085,18 @@
     init();
   }
 
+  // Re-init on SPA navigation (Framer client-side routing)
   var origPush = history.pushState;
   history.pushState = function () {
     var r = origPush.apply(this, arguments);
     setTimeout(closeDrawer, 50);
+    setTimeout(closeMega, 50);
     setTimeout(init, 100);
     return r;
   };
   window.addEventListener("popstate", function () {
     setTimeout(closeDrawer, 50);
+    setTimeout(closeMega, 50);
     setTimeout(init, 100);
   });
 })();
