@@ -405,28 +405,17 @@
       "#" + DRAWER_ID + " .th-d-main a:hover{color:rgba(20,44,47,0.6)}",
       "#" + DRAWER_ID + " .th-d-main a svg{width:12px;height:12px;opacity:0.4}",
 
-      // Services list (2 cols with thumbnails)
+      // Services list (2 cols, text only — readable, no truncation)
       "#" + DRAWER_ID + " .th-d-services{",
-        "display:grid;grid-template-columns:1fr 1fr;gap:4px 6px;",
+        "display:grid;grid-template-columns:1fr 1fr;gap:0 18px;",
       "}",
       "#" + DRAWER_ID + " .th-d-services a{",
-        "display:flex;align-items:center;gap:10px;",
-        "padding:8px 8px;border-radius:10px;",
-        "font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;",
+        "padding:12px 0;border-bottom:1px solid rgba(20,44,47,0.06);",
+        "font-family:'Inter',sans-serif;font-size:14px;font-weight:400;",
         "color:rgb(20,44,47);text-decoration:none;letter-spacing:-0.005em;",
-        "transition:background 160ms ease;min-width:0;line-height:1.25;",
+        "transition:color 160ms ease;line-height:1.3;",
       "}",
-      "#" + DRAWER_ID + " .th-d-services a:hover,#" + DRAWER_ID + " .th-d-services a:active{",
-        "background:rgba(20,44,47,0.05);",
-      "}",
-      "#" + DRAWER_ID + " .th-d-svc-thumb{",
-        "width:32px;height:32px;border-radius:6px;",
-        "background-size:cover;background-position:center;",
-        "background-color:rgb(244,240,233);flex-shrink:0;",
-      "}",
-      "#" + DRAWER_ID + " .th-d-services a span{",
-        "min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;",
-      "}",
+      "#" + DRAWER_ID + " .th-d-services a:hover{color:rgba(20,44,47,0.55)}",
       "#" + DRAWER_ID + " .th-d-allservices{",
         "margin-top:10px;display:inline-flex;align-items:center;gap:8px;",
         "font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;",
@@ -682,10 +671,8 @@
     OTHER_SERVICES.forEach(function (s) {
       var a = document.createElement("a");
       a.href = s.href;
+      a.textContent = s.label;
       a.addEventListener("click", closeDrawer);
-      a.innerHTML =
-        '<span class="th-d-svc-thumb" style="background-image:url(\'' + SERVICE_CDN + '/' + s.img + '.webp\')"></span>' +
-        '<span>' + s.label + '</span>';
       services.appendChild(a);
     });
     body.appendChild(services);
