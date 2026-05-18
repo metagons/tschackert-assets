@@ -81,12 +81,10 @@
       "html{scroll-padding-top:80px}",
 
       // ── HIDE NAV + FABS WHEN A MODAL/DRAWER IS OPEN ──
-      // Detect via body overflow:hidden so the modal's close button is accessible.
-      // Excludes our OWN drawer + mega (they set a different body class instead).
-      "body[style*='overflow: hidden']:not(.tschackert-self-open) #" + HEADER_ID + ",",
-      "body[style*='overflow:hidden']:not(.tschackert-self-open) #" + HEADER_ID + ",",
-      "body[style*='overflow: hidden']:not(.tschackert-self-open) #tschackert-fab-wrap,",
-      "body[style*='overflow:hidden']:not(.tschackert-self-open) #tschackert-fab-wrap{",
+      "body[style*='overflow: hidden'] #" + HEADER_ID + ",",
+      "body[style*='overflow:hidden'] #" + HEADER_ID + ",",
+      "body[style*='overflow: hidden'] #tschackert-fab-wrap,",
+      "body[style*='overflow:hidden'] #tschackert-fab-wrap{",
         "opacity:0!important;pointer-events:none!important;",
         "transition:opacity 200ms ease;",
       "}",
@@ -253,11 +251,14 @@
       "#" + MEGA_ID + " .th-mega-tile--dark .th-mega-tile-eyebrow{color:rgba(240,238,233,0.6)}",
       "#" + MEGA_ID + " .th-mega-tile--dark .th-mega-tile-desc{color:rgba(240,238,233,0.78)}",
       "#" + MEGA_ID + " .th-mega-tile--dark .th-mega-tile-arrow{background:rgba(255,255,255,0.14);color:rgb(240,238,233)}",
-      // Gold variant
-      "#" + MEGA_ID + " .th-mega-tile--gold{background:rgb(184,149,106);color:rgb(20,44,47)}",
-      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-eyebrow{color:rgba(20,44,47,0.6)}",
-      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-desc{color:rgba(20,44,47,0.78)}",
-      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-arrow{background:rgba(20,44,47,0.14);color:rgb(20,44,47)}",
+      // Off-white variant (Veneers) — soft warm cream, subtle elegance
+      "#" + MEGA_ID + " .th-mega-tile--gold{",
+        "background:rgb(240,234,222);color:rgb(20,44,47);",
+        "border:1px solid rgba(20,44,47,0.06);",
+      "}",
+      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-eyebrow{color:rgba(20,44,47,0.55)}",
+      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-desc{color:rgba(20,44,47,0.7)}",
+      "#" + MEGA_ID + " .th-mega-tile--gold .th-mega-tile-arrow{background:rgba(20,44,47,0.08);color:rgb(20,44,47)}",
 
       // Other services
       "#" + MEGA_ID + " .th-mega-others-label{",
@@ -377,10 +378,13 @@
       "#" + DRAWER_ID + " .th-d-tile--dark{background:rgb(20,44,47);color:rgb(240,238,233)}",
       "#" + DRAWER_ID + " .th-d-tile--dark .th-d-tile-desc{color:rgba(240,238,233,0.72)}",
       "#" + DRAWER_ID + " .th-d-tile--dark .th-d-tile-arrow{background:rgba(255,255,255,0.14);color:rgb(240,238,233)}",
-      // Gold
-      "#" + DRAWER_ID + " .th-d-tile--gold{background:rgb(184,149,106);color:rgb(20,44,47)}",
-      "#" + DRAWER_ID + " .th-d-tile--gold .th-d-tile-desc{color:rgba(20,44,47,0.72)}",
-      "#" + DRAWER_ID + " .th-d-tile--gold .th-d-tile-arrow{background:rgba(20,44,47,0.14);color:rgb(20,44,47)}",
+      // Off-white (Veneers) — soft warm cream
+      "#" + DRAWER_ID + " .th-d-tile--gold{",
+        "background:rgb(240,234,222);color:rgb(20,44,47);",
+        "border:1px solid rgba(20,44,47,0.06);",
+      "}",
+      "#" + DRAWER_ID + " .th-d-tile--gold .th-d-tile-desc{color:rgba(20,44,47,0.65)}",
+      "#" + DRAWER_ID + " .th-d-tile--gold .th-d-tile-arrow{background:rgba(20,44,47,0.08);color:rgb(20,44,47)}",
 
       // Section labels
       "#" + DRAWER_ID + " .th-d-sec-label{",
@@ -401,17 +405,28 @@
       "#" + DRAWER_ID + " .th-d-main a:hover{color:rgba(20,44,47,0.6)}",
       "#" + DRAWER_ID + " .th-d-main a svg{width:12px;height:12px;opacity:0.4}",
 
-      // Services list (2 cols)
+      // Services list (2 cols with thumbnails)
       "#" + DRAWER_ID + " .th-d-services{",
-        "display:grid;grid-template-columns:1fr 1fr;gap:0 18px;",
+        "display:grid;grid-template-columns:1fr 1fr;gap:4px 6px;",
       "}",
       "#" + DRAWER_ID + " .th-d-services a{",
-        "padding:11px 0;border-bottom:1px solid rgba(20,44,47,0.06);",
-        "font-family:'Inter',sans-serif;font-size:14px;font-weight:400;",
+        "display:flex;align-items:center;gap:10px;",
+        "padding:8px 8px;border-radius:10px;",
+        "font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;",
         "color:rgb(20,44,47);text-decoration:none;letter-spacing:-0.005em;",
-        "transition:color 160ms ease;",
+        "transition:background 160ms ease;min-width:0;line-height:1.25;",
       "}",
-      "#" + DRAWER_ID + " .th-d-services a:hover{color:rgba(20,44,47,0.55)}",
+      "#" + DRAWER_ID + " .th-d-services a:hover,#" + DRAWER_ID + " .th-d-services a:active{",
+        "background:rgba(20,44,47,0.05);",
+      "}",
+      "#" + DRAWER_ID + " .th-d-svc-thumb{",
+        "width:32px;height:32px;border-radius:6px;",
+        "background-size:cover;background-position:center;",
+        "background-color:rgb(244,240,233);flex-shrink:0;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-services a span{",
+        "min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;",
+      "}",
       "#" + DRAWER_ID + " .th-d-allservices{",
         "margin-top:10px;display:inline-flex;align-items:center;gap:8px;",
         "font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;",
@@ -431,6 +446,37 @@
         "transition:color 160ms ease;",
       "}",
       "#" + DRAWER_ID + " .th-d-secondary a:hover{color:rgb(20,44,47)}",
+
+      // Anfahrt section (directions + parking)
+      "#" + DRAWER_ID + " .th-d-anfahrt{",
+        "display:grid;grid-template-columns:1fr 1fr;gap:8px;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-anfahrt button,#" + DRAWER_ID + " .th-d-anfahrt a{",
+        "display:flex;flex-direction:column;align-items:flex-start;gap:6px;",
+        "padding:14px 16px;border-radius:12px;",
+        "background:rgb(255,255,255);border:1px solid rgba(20,44,47,0.08);",
+        "color:rgb(20,44,47);text-decoration:none;cursor:pointer;",
+        "font-family:'Inter',sans-serif;text-align:left;",
+        "transition:background 160ms ease, transform 200ms ease;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-anfahrt button:hover,#" + DRAWER_ID + " .th-d-anfahrt a:hover{",
+        "background:rgb(250,247,240);transform:translateY(-1px);",
+      "}",
+      "#" + DRAWER_ID + " .th-d-anfahrt-icon{",
+        "width:32px;height:32px;border-radius:8px;",
+        "background:rgba(20,44,47,0.08);",
+        "display:inline-flex;align-items:center;justify-content:center;",
+        "color:rgb(20,44,47);",
+      "}",
+      "#" + DRAWER_ID + " .th-d-anfahrt-icon svg{width:16px;height:16px}",
+      "#" + DRAWER_ID + " .th-d-anfahrt-label{",
+        "font-family:'Geist','Inter',sans-serif;font-size:14px;font-weight:500;",
+        "letter-spacing:-0.01em;line-height:1.2;",
+      "}",
+      "#" + DRAWER_ID + " .th-d-anfahrt-desc{",
+        "font-size:11.5px;color:rgb(107,99,89);letter-spacing:-0.005em;",
+        "line-height:1.35;",
+      "}",
 
       // Contact info footer
       "#" + DRAWER_ID + " .th-d-contact{",
@@ -636,8 +682,10 @@
     OTHER_SERVICES.forEach(function (s) {
       var a = document.createElement("a");
       a.href = s.href;
-      a.textContent = s.label;
       a.addEventListener("click", closeDrawer);
+      a.innerHTML =
+        '<span class="th-d-svc-thumb" style="background-image:url(\'' + SERVICE_CDN + '/' + s.img + '.webp\')"></span>' +
+        '<span>' + s.label + '</span>';
       services.appendChild(a);
     });
     body.appendChild(services);
@@ -666,6 +714,40 @@
     });
     body.appendChild(secondary);
 
+    // Anfahrt section
+    var anfLabel = document.createElement("p");
+    anfLabel.className = "th-d-sec-label";
+    anfLabel.textContent = "Anfahrt";
+    body.appendChild(anfLabel);
+
+    var anfahrt = document.createElement("div");
+    anfahrt.className = "th-d-anfahrt";
+
+    var dirLink = document.createElement("a");
+    dirLink.href = "https://www.google.com/maps/dir/?api=1&destination=Goethestra%C3%9Fe+23+60313+Frankfurt";
+    dirLink.target = "_blank";
+    dirLink.rel = "noopener noreferrer";
+    dirLink.innerHTML =
+      '<span class="th-d-anfahrt-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8"/></svg></span>' +
+      '<span class="th-d-anfahrt-label">Routenplaner</span>' +
+      '<span class="th-d-anfahrt-desc">Direkter Weg zur Praxis</span>';
+    anfahrt.appendChild(dirLink);
+
+    var parkBtn = document.createElement("button");
+    parkBtn.type = "button";
+    parkBtn.innerHTML =
+      '<span class="th-d-anfahrt-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.8"/><path d="M9 16V8h3.5a2.5 2.5 0 0 1 0 5H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
+      '<span class="th-d-anfahrt-label">Parkhäuser</span>' +
+      '<span class="th-d-anfahrt-desc">6 Optionen in der Nähe</span>';
+    parkBtn.addEventListener("click", function () {
+      closeDrawer();
+      // Defer so drawer can finish closing before modal opens
+      setTimeout(openFabModal, 200);
+    });
+    anfahrt.appendChild(parkBtn);
+
+    body.appendChild(anfahrt);
+
     // Contact footer
     var contact = document.createElement("div");
     contact.className = "th-d-contact";
@@ -683,8 +765,7 @@
     if (!drawer) return;
     drawer.classList.add("is-open");
     backdrop.classList.add("is-open");
-    btn.setAttribute("aria-expanded", "true");
-    document.body.classList.add("tschackert-self-open");
+    btn.setAttribute("aria-expanded", "false");
     document.body.style.overflow = "hidden";
   }
 
@@ -693,7 +774,6 @@
     drawer.classList.remove("is-open");
     backdrop.classList.remove("is-open");
     btn.setAttribute("aria-expanded", "false");
-    document.body.classList.remove("tschackert-self-open");
     document.body.style.overflow = "";
   }
 
