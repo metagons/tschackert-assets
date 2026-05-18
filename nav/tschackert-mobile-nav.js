@@ -108,6 +108,38 @@
         "backdrop-filter:blur(14px) saturate(120%);",
         "border-bottom:1px solid rgba(20,44,47,0.06);",
         "font-family:'Inter',system-ui,sans-serif;",
+        // Smooth transitions when light/dark mode toggles
+        "transition:background 600ms ease, border-color 600ms ease, color 600ms ease;",
+      "}",
+
+      // ── DARK MODE for the nav when the page bg is dark ──
+      // The BodyBackgroundController sets html[data-page-dark='true'] when the
+      // overlay opacity is past the threshold. Nav re-themes smoothly.
+      "html[data-page-dark='true'] #" + HEADER_ID + "{",
+        "background:rgba(13,19,28,0.55);",
+        "border-bottom-color:rgba(255,255,255,0.08);",
+      "}",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-logo img{filter:invert(1) brightness(1.2)}",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-links a,",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-links button{color:rgb(240,238,233)!important}",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-links a:hover,",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-links button:hover{color:rgba(240,238,233,0.7)!important}",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-cta{",
+        "background:rgb(240,238,233)!important;color:rgb(20,44,47)!important;",
+      "}",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-cta:hover{background:rgb(255,255,255)!important}",
+      "html[data-page-dark='true'] #" + BTN_ID + "{",
+        "background:rgba(13,19,28,0.85)!important;",
+        "border-color:rgba(255,255,255,0.15)!important;",
+        "color:rgb(240,238,233)!important;",
+      "}",
+      // Smooth transitions for the dark-mode-affected elements
+      "#" + HEADER_ID + " .th-logo img,",
+      "#" + HEADER_ID + " .th-links a,",
+      "#" + HEADER_ID + " .th-links button,",
+      "#" + HEADER_ID + " .th-cta,",
+      "#" + BTN_ID + "{",
+        "transition:color 600ms ease, background 600ms ease, border-color 600ms ease, filter 600ms ease;",
       "}",
       "@media (max-width:1100px){#" + HEADER_ID + "{padding:12px 32px}}",
       "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + "{padding:12px 18px;min-height:64px}}",
