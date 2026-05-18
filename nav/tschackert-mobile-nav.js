@@ -43,6 +43,18 @@
       // Anchor jumps account for sticky nav.
       "html{scroll-padding-top:80px}",
 
+      // ── HIDE NAV + FABS WHEN ANY MODAL/DRAWER IS OPEN ──
+      // Detects open dialogs via aria-modal so the user can see the modal's own
+      // close button instead of our hamburger covering it. Uses CSS :has() selector
+      // (modern browsers); a JS MutationObserver fallback below handles older ones.
+      "body:has([role='dialog'][aria-modal='true']) #" + HEADER_ID + ",",
+      "body:has([role='dialog'][aria-modal='true']) #tschackert-fab-wrap,",
+      "body.tschackert-modal-open #" + HEADER_ID + ",",
+      "body.tschackert-modal-open #tschackert-fab-wrap{",
+        "opacity:0!important;pointer-events:none!important;",
+        "transition:opacity 200ms ease;",
+      "}",
+
       // ── MOBILE TAP-TARGET ENFORCEMENT (WCAG AAA = 44×44) ──
       // Target our known button classes from code components. Excludes nav/FAB which
       // are already sized correctly. Adds min-height + padding on mobile only.
