@@ -44,13 +44,15 @@
       "html{scroll-padding-top:80px}",
 
       // ── HIDE NAV + FABS WHEN ANY MODAL/DRAWER IS OPEN ──
-      // Detects open dialogs via aria-modal so the user can see the modal's own
-      // close button instead of our hamburger covering it. Uses CSS :has() selector
-      // (modern browsers); a JS MutationObserver fallback below handles older ones.
-      "body:has([role='dialog'][aria-modal='true']) #" + HEADER_ID + ",",
-      "body:has([role='dialog'][aria-modal='true']) #tschackert-fab-wrap,",
-      "body.tschackert-modal-open #" + HEADER_ID + ",",
-      "body.tschackert-modal-open #tschackert-fab-wrap{",
+      // Detected via body overflow:hidden (universal modal-open pattern set by
+      // ServicesAssessmentGrid drawer, our menu drawer, and parking modal).
+      // Our own drawers always have role=dialog in the DOM (translated off-screen
+      // when closed), so :has() would hide the nav permanently — body inline style
+      // is the only reliable signal of an actually-open modal.
+      "body[style*='overflow: hidden'] #" + HEADER_ID + ",",
+      "body[style*='overflow:hidden'] #" + HEADER_ID + ",",
+      "body[style*='overflow: hidden'] #tschackert-fab-wrap,",
+      "body[style*='overflow:hidden'] #tschackert-fab-wrap{",
         "opacity:0!important;pointer-events:none!important;",
         "transition:opacity 200ms ease;",
       "}",
