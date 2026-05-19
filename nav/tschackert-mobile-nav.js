@@ -16,7 +16,10 @@
   var Z = 2147483647;
   var MOBILE_BP = 860;
 
-  var LOGO_URL = "https://framerusercontent.com/images/13Uiui9ACqyo6DnuT4zwgz38QdU.png?width=1176&height=281";
+  // Two logo variants. Black is shown on light bg, white on dark bg. They're
+  // stacked in the DOM and cross-fade via CSS opacity tied to html[data-page-dark].
+  var LOGO_DARK = "https://cdn.jsdelivr.net/gh/metagons/tschackert-assets@2eb2361/logos/pure-tschackert-logo-black.png";
+  var LOGO_LIGHT = "https://cdn.jsdelivr.net/gh/metagons/tschackert-assets@2eb2361/logos/pure-tschackert-logo-white.png";
   var SERVICE_CDN = "https://cdn.jsdelivr.net/gh/metagons/tschackert-assets@main/services";
 
   // Featured services — highlighted at top
@@ -119,7 +122,10 @@
         "background:rgba(13,19,28,0.55);",
         "border-bottom-color:rgba(255,255,255,0.08);",
       "}",
-      "html[data-page-dark='true'] #" + HEADER_ID + " .th-logo img{filter:invert(1) brightness(1.2)}",
+      // Logo cross-fade: in light mode show the dark logo, in dark mode show the white logo
+      "#" + HEADER_ID + " .th-logo .th-logo-light{opacity:0}",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-logo .th-logo-dark{opacity:0}",
+      "html[data-page-dark='true'] #" + HEADER_ID + " .th-logo .th-logo-light{opacity:1}",
       "html[data-page-dark='true'] #" + HEADER_ID + " .th-links a,",
       "html[data-page-dark='true'] #" + HEADER_ID + " .th-links button{color:rgb(240,238,233)!important}",
       "html[data-page-dark='true'] #" + HEADER_ID + " .th-links a:hover,",
@@ -144,9 +150,10 @@
       "@media (max-width:1100px){#" + HEADER_ID + "{padding:12px 32px}}",
       "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + "{padding:12px 18px;min-height:64px}}",
 
-      // Logo
-      "#" + HEADER_ID + " .th-logo{display:block;height:44px;flex:0 0 auto}",
-      "#" + HEADER_ID + " .th-logo img{height:100%;width:auto;display:block;object-fit:contain}",
+      // Logo (two stacked imgs, light + dark, cross-fade via opacity)
+      "#" + HEADER_ID + " .th-logo{position:relative;display:block;height:44px;flex:0 0 auto}",
+      "#" + HEADER_ID + " .th-logo img{height:100%;width:auto;display:block;object-fit:contain;transition:opacity 600ms ease-out}",
+      "#" + HEADER_ID + " .th-logo .th-logo-light{position:absolute;top:0;left:0}",
       "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + " .th-logo{height:36px}}",
 
       // Center nav (desktop only)
@@ -625,9 +632,11 @@
     headLogo.className = "th-d-logo";
     headLogo.setAttribute("aria-label", "Dr. Tschackert");
     headLogo.addEventListener("click", closeDrawer);
+    // Drawer is always the cream-bg drawer overlay, so dark logo is the right
+    // one. Single img is fine here (no theme swap needed inside the drawer).
     var img = document.createElement("img");
-    img.src = LOGO_URL;
-    img.alt = "Dr. Tschackert";
+    img.src = LOGO_DARK;
+    img.alt = "Pure Tschackert";
     headLogo.appendChild(img);
     head.appendChild(headLogo);
 
@@ -810,15 +819,23 @@
     header.id = HEADER_ID;
     header.setAttribute("aria-label", "Hauptnavigation");
 
-    // Logo
+    // Logo: two stacked imgs (light + dark variants) cross-fade via opacity
+    // when html[data-page-dark] toggles, so the swap matches the bg fade.
     var logoLink = document.createElement("a");
     logoLink.href = "/";
     logoLink.className = "th-logo";
-    logoLink.setAttribute("aria-label", "Dr. Tschackert");
-    var logoImg = document.createElement("img");
-    logoImg.src = LOGO_URL;
-    logoImg.alt = "Dr. Tschackert";
-    logoLink.appendChild(logoImg);
+    logoLink.setAttribute("aria-label", "Pure Tschackert");
+    var logoDark = document.createElement("img");
+    logoDark.className = "th-logo-dark";
+    logoDark.src = LOGO_DARK;
+    logoDark.alt = "Pure Tschackert";
+    var logoLight = document.createElement("img");
+    logoLight.className = "th-logo-light";
+    logoLight.src = LOGO_LIGHT;
+    logoLight.alt = "";
+    logoLight.setAttribute("aria-hidden", "true");
+    logoLink.appendChild(logoDark);
+    logoLink.appendChild(logoLight);
     header.appendChild(logoLink);
 
     // Desktop nav links
