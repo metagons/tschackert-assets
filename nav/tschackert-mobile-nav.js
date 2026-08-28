@@ -84,6 +84,11 @@
       "html{scroll-padding-top:80px}",
 
       // ── HIDE NAV + FABS WHEN A MODAL/DRAWER IS OPEN ──
+      "body.tschackert-drawer-open,body.tschackert-fab-open{overflow:hidden!important}",
+      "body.tschackert-drawer-open #" + HEADER_ID + ",",
+      "body.tschackert-fab-open #" + HEADER_ID + ",",
+      "body.tschackert-drawer-open #tschackert-fab-wrap,",
+      "body.tschackert-fab-open #tschackert-fab-wrap,",
       "body[style*='overflow: hidden'] #" + HEADER_ID + ",",
       "body[style*='overflow:hidden'] #" + HEADER_ID + ",",
       "body[style*='overflow: hidden'] #tschackert-fab-wrap,",
@@ -485,14 +490,14 @@
       "}",
       "#" + DRAWER_ID + " .th-d-anfahrt button,#" + DRAWER_ID + " .th-d-anfahrt a{",
         "display:flex;flex-direction:column;align-items:flex-start;gap:6px;",
-        "padding:14px 16px;border-radius:12px;",
+        "padding:14px 16px;border-radius:16px;",
         "background:rgb(255,255,255);border:1px solid rgba(20,44,47,0.08);",
         "color:rgb(20,44,47);text-decoration:none;cursor:pointer;",
         "font-family:'Inter',sans-serif;text-align:left;",
         "transition:background 160ms ease, transform 200ms ease;",
       "}",
       "#" + DRAWER_ID + " .th-d-anfahrt button:hover,#" + DRAWER_ID + " .th-d-anfahrt a:hover{",
-        "background:rgb(250,247,240);transform:translateY(-1px);",
+        "background:rgb(240,238,233);transform:translateY(-1px);",
       "}",
       "#" + DRAWER_ID + " .th-d-anfahrt-icon{",
         "width:32px;height:32px;border-radius:8px;",
@@ -528,6 +533,277 @@
   // ==========================================================================
   var header, btn, drawer, backdrop;
   var megaPanel, megaBackdrop, leistungenTrigger;
+  var drawerReturnFocus = null;
+  var megaReturnFocus = null;
+  var bodyLockObserver = null;
+  var drawerIsolationState = null;
+  var fabIsolationState = null;
+  var managedHeaderState = null;
+  var managedFabState = null;
+
+  function hideSurface(surface, surfaceBackdrop) {
+    if (surface) {
+      surface.setAttribute("aria-hidden", "true");
+      surface.setAttribute("inert", "");
+    }
+    if (surfaceBackdrop) surfaceBackdrop.setAttribute("aria-hidden", "true");
+  }
+
+  function showSurface(surface, surfaceBackdrop) {
+    if (surface) {
+      surface.removeAttribute("inert");
+      surface.setAttribute("aria-hidden", "false");
+    }
+    if (surfaceBackdrop) surfaceBackdrop.setAttribute("aria-hidden", "false");
+  }
+
+  function restoreFocus(element) {
+    if (element && document.contains(element) && typeof element.focus === "function") {
+      element.focus();
+    }
+  }
+
+  function captureAccessibilityState(element) {
+    return {
+      inert: element.hasAttribute("inert"),
+      ariaHidden: element.getAttribute("aria-hidden")
+    };
+  }
+
+  function restoreAccessibilityState(element, state) {
+    if (!element || !state) return;
+    if (state.inert) {
+      if (!element.hasAttribute("inert")) element.setAttribute("inert", "");
+    } else if (element.hasAttribute("inert")) {
+      element.removeAttribute("inert");
+    }
+    if (state.ariaHidden === null) {
+      if (element.hasAttribute("aria-hidden")) element.removeAttribute("aria-hidden");
+    } else if (element.getAttribute("aria-hidden") !== state.ariaHidden) {
+      element.setAttribute("aria-hidden", state.ariaHidden);
+    }
+  }
+
+  function hideFromKeyboard(element) {
+    if (!element) return;
+    if (element.getAttribute("aria-hidden") !== "true") element.setAttribute("aria-hidden", "true");
+    if (!element.hasAttribute("inert")) element.setAttribute("inert", "");
+  }
+
+  function isManagedHiddenElement(element) {
+    return !!((managedHeaderState && managedHeaderState.element === element) ||
+      (managedFabState && managedFabState.element === element));
+  }
+
+  function isolateBody(allowedElements) {
+    if (!document.body) return null;
+    var manager = { allowed: allowedElements, records: new Map(), observer: null };
+
+    manager.enforceRecord = function (record) {
+      if (!record.element.hasAttribute("inert")) {
+        record.pendingOwn.inert += 1;
+        record.element.setAttribute("inert", "");
+      }
+      if (record.element.getAttribute("aria-hidden") !== "true") {
+        record.pendingOwn.ariaHidden += 1;
+        record.element.setAttribute("aria-hidden", "true");
+      }
+    };
+
+    manager.processRecordMutations = function (record, mutations) {
+      mutations.forEach(function (mutation) {
+        var key = mutation.attributeName === "aria-hidden" ? "ariaHidden" : mutation.attributeName;
+        if (record.pendingOwn[key] > 0) {
+          record.pendingOwn[key] -= 1;
+          return;
+        }
+        if (key === "inert") record.state.inert = record.element.hasAttribute("inert");
+        else record.state.ariaHidden = record.element.getAttribute("aria-hidden");
+      });
+      manager.enforceRecord(record);
+    };
+
+    manager.createRecord = function (element) {
+      var record = {
+        element: element,
+        state: captureAccessibilityState(element),
+        pendingOwn: { inert: 0, ariaHidden: 0 },
+        detached: false,
+        observer: null
+      };
+      record.observer = new MutationObserver(function (mutations) {
+        manager.processRecordMutations(record, mutations);
+      });
+      record.observer.observe(element, {
+        attributes: true,
+        attributeFilter: ["inert", "aria-hidden"]
+      });
+      manager.records.set(element, record);
+      manager.enforceRecord(record);
+      return record;
+    };
+
+    Array.prototype.forEach.call(document.body.children, function (element) {
+      if (element.tagName === "SCRIPT" || element.tagName === "STYLE") return;
+      if (allowedElements.indexOf(element) !== -1 || isManagedHiddenElement(element)) return;
+      manager.createRecord(element);
+    });
+    manager.processMutations = function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type !== "childList") return;
+        Array.prototype.forEach.call(mutation.removedNodes, function (node) {
+          var removedRecord = manager.records.get(node);
+          if (removedRecord) removedRecord.detached = true;
+        });
+        Array.prototype.forEach.call(mutation.addedNodes, function (node) {
+          if (!node || node.nodeType !== 1 || node.parentElement !== document.body) return;
+          if (node.tagName === "SCRIPT" || node.tagName === "STYLE") return;
+          if (manager.allowed.indexOf(node) !== -1 || isManagedHiddenElement(node)) return;
+          if (manager.records.has(node)) {
+            var existingRecord = manager.records.get(node);
+            if (existingRecord.detached) {
+              existingRecord.detached = false;
+              var pending = existingRecord.observer.takeRecords();
+              if (pending.length) manager.processRecordMutations(existingRecord, pending);
+              else manager.enforceRecord(existingRecord);
+            }
+            return;
+          }
+          manager.createRecord(node);
+        });
+      });
+    };
+    manager.observer = new MutationObserver(manager.processMutations);
+    manager.observer.observe(document.body, {
+      childList: true
+    });
+    return manager;
+  }
+
+  function restoreBodyIsolation(manager) {
+    if (!manager) return;
+    if (manager.observer) {
+      var pending = manager.observer.takeRecords();
+      if (pending.length) manager.processMutations(pending);
+      manager.observer.disconnect();
+    }
+    manager.records.forEach(function (record) {
+      if (record.observer) {
+        var pending = record.observer.takeRecords();
+        if (pending.length) manager.processRecordMutations(record, pending);
+        record.observer.disconnect();
+      }
+      restoreAccessibilityState(record.element, record.state);
+    });
+  }
+
+  function createManagedHiddenState(element) {
+    var manager = {
+      element: element,
+      state: captureAccessibilityState(element),
+      pendingOwn: { inert: 0, ariaHidden: 0 },
+      observer: null
+    };
+    manager.processMutations = function (mutations) {
+      mutations.forEach(function (mutation) {
+        var key = mutation.attributeName === "aria-hidden" ? "ariaHidden" : mutation.attributeName;
+        if (manager.pendingOwn[key] > 0) {
+          manager.pendingOwn[key] -= 1;
+          return;
+        }
+        if (key === "inert") manager.state.inert = element.hasAttribute("inert");
+        else manager.state.ariaHidden = element.getAttribute("aria-hidden");
+      });
+      if (!element.hasAttribute("inert")) {
+        manager.pendingOwn.inert += 1;
+        element.setAttribute("inert", "");
+      }
+      if (element.getAttribute("aria-hidden") !== "true") {
+        manager.pendingOwn.ariaHidden += 1;
+        element.setAttribute("aria-hidden", "true");
+      }
+    };
+    manager.observer = new MutationObserver(manager.processMutations);
+    manager.observer.observe(element, {
+      attributes: true,
+      attributeFilter: ["inert", "aria-hidden"]
+    });
+    manager.processMutations([]);
+    return manager;
+  }
+
+  function releaseManagedHiddenState(manager) {
+    if (!manager) return;
+    if (manager.observer) {
+      var pending = manager.observer.takeRecords();
+      if (pending.length) manager.processMutations(pending);
+      manager.observer.disconnect();
+    }
+    restoreAccessibilityState(manager.element, manager.state);
+  }
+
+  function setManagedHidden(element, hidden, stateName) {
+    if (!element) return;
+    var state = stateName === "header" ? managedHeaderState : managedFabState;
+    if (hidden) {
+      if (!state || state.element !== element) {
+        if (state) releaseManagedHiddenState(state);
+        state = createManagedHiddenState(element);
+        if (stateName === "header") managedHeaderState = state;
+        else managedFabState = state;
+      } else {
+        state.processMutations([]);
+      }
+    } else if (state) {
+      releaseManagedHiddenState(state);
+      if (stateName === "header") managedHeaderState = null;
+      else managedFabState = null;
+    }
+  }
+
+  function syncChromeAccessibility() {
+    if (!document.body) return;
+    if ((drawer && drawer.classList.contains("is-open")) ||
+        (fabModalBackdrop && fabModalBackdrop.classList.contains("is-open"))) return;
+    var bodyLocked = document.body.style.overflow === "hidden";
+    var fabWrap = document.getElementById(FAB_WRAP_ID);
+    setManagedHidden(header, bodyLocked, "header");
+    setManagedHidden(fabWrap, bodyLocked || !!(fabWrap && fabWrap.classList.contains("is-hidden")), "fab");
+  }
+
+  function setupBodyLockObserver() {
+    if (bodyLockObserver || !document.body) return;
+    bodyLockObserver = new MutationObserver(syncChromeAccessibility);
+    bodyLockObserver.observe(document.body, { attributes: true, attributeFilter: ["style"] });
+  }
+
+  function focusableElements(container) {
+    if (!container) return [];
+    var selector = "a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex='-1'])";
+    return Array.prototype.filter.call(container.querySelectorAll(selector), function (element) {
+      return element.getAttribute("aria-hidden") !== "true" &&
+        (element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+    });
+  }
+
+  function trapFocus(container, event) {
+    var items = focusableElements(container);
+    if (!items.length) {
+      event.preventDefault();
+      if (container && typeof container.focus === "function") container.focus();
+      return;
+    }
+    var first = items[0];
+    var last = items[items.length - 1];
+    var active = document.activeElement;
+    if (event.shiftKey && (active === first || !container.contains(active))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (active === last || !container.contains(active))) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
 
   // ==========================================================================
   // Mega panel (desktop)
@@ -535,12 +811,15 @@
   function buildMegaPanel() {
     megaBackdrop = document.createElement("div");
     megaBackdrop.id = MEGA_BACKDROP_ID;
-    megaBackdrop.addEventListener("click", closeMega);
+    megaBackdrop.setAttribute("aria-hidden", "true");
+    megaBackdrop.addEventListener("click", function () { closeMega(true); });
 
     megaPanel = document.createElement("div");
     megaPanel.id = MEGA_ID;
-    megaPanel.setAttribute("role", "menu");
+    megaPanel.setAttribute("role", "region");
     megaPanel.setAttribute("aria-label", "Unsere Leistungen");
+    megaPanel.setAttribute("aria-hidden", "true");
+    megaPanel.setAttribute("inert", "");
 
     var inner = document.createElement("div");
     inner.className = "th-mega-inner";
@@ -608,16 +887,27 @@
 
   function openMega() {
     if (!megaPanel) return;
+    megaReturnFocus = document.activeElement;
+    showSurface(megaPanel, megaBackdrop);
     megaPanel.classList.add("is-open");
     megaBackdrop.classList.add("is-open");
-    if (leistungenTrigger) leistungenTrigger.classList.add("is-active");
+    if (leistungenTrigger) {
+      leistungenTrigger.classList.add("is-active");
+      leistungenTrigger.setAttribute("aria-expanded", "true");
+    }
   }
 
-  function closeMega() {
+  function closeMega(returnFocus) {
     if (!megaPanel) return;
     megaPanel.classList.remove("is-open");
     megaBackdrop.classList.remove("is-open");
-    if (leistungenTrigger) leistungenTrigger.classList.remove("is-active");
+    hideSurface(megaPanel, megaBackdrop);
+    if (leistungenTrigger) {
+      leistungenTrigger.classList.remove("is-active");
+      leistungenTrigger.setAttribute("aria-expanded", "false");
+    }
+    if (returnFocus === true) restoreFocus(megaReturnFocus || leistungenTrigger);
+    megaReturnFocus = null;
   }
 
   // ==========================================================================
@@ -645,7 +935,7 @@
     closeBtn.type = "button";
     closeBtn.setAttribute("aria-label", "Menü schließen");
     closeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-    closeBtn.addEventListener("click", closeDrawer);
+    closeBtn.addEventListener("click", function () { closeDrawer(true); });
     head.appendChild(closeBtn);
 
     drawer.appendChild(head);
@@ -767,14 +1057,16 @@
 
     var parkBtn = document.createElement("button");
     parkBtn.type = "button";
+    parkBtn.setAttribute("aria-haspopup", "dialog");
+    parkBtn.setAttribute("aria-expanded", "false");
+    parkBtn.setAttribute("aria-controls", FAB_MODAL_ID);
     parkBtn.innerHTML =
       '<span class="th-d-anfahrt-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.8"/><path d="M9 16V8h3.5a2.5 2.5 0 0 1 0 5H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
       '<span class="th-d-anfahrt-label">Parkhäuser</span>' +
       '<span class="th-d-anfahrt-desc">6 Optionen in der Nähe</span>';
     parkBtn.addEventListener("click", function () {
-      closeDrawer();
-      // Defer so drawer can finish closing before modal opens
-      setTimeout(openFabModal, 200);
+      closeDrawer(false);
+      openFabModal(parkBtn, btn);
     });
     anfahrt.appendChild(parkBtn);
 
@@ -795,18 +1087,38 @@
 
   function openDrawer() {
     if (!drawer) return;
+    if (drawer.classList.contains("is-open")) return;
+    if (fabModalBackdrop && fabModalBackdrop.classList.contains("is-open")) closeFabModal(false);
+    if (megaPanel && megaPanel.classList.contains("is-open")) closeMega(false);
+    drawerReturnFocus = btn;
+    showSurface(drawer, backdrop);
     drawer.classList.add("is-open");
     backdrop.classList.add("is-open");
-    btn.setAttribute("aria-expanded", "false");
-    document.body.style.overflow = "hidden";
+    btn.setAttribute("aria-expanded", "true");
+    btn.setAttribute("aria-label", "Menü schließen");
+    document.body.classList.add("tschackert-drawer-open");
+    drawerIsolationState = isolateBody([backdrop, drawer]);
+    setTimeout(function () {
+      var first = focusableElements(drawer)[0];
+      if (first) first.focus();
+      else drawer.focus();
+    }, 0);
   }
 
-  function closeDrawer() {
+  function closeDrawer(returnFocus) {
     if (!drawer) return;
+    if (!drawer.classList.contains("is-open")) return;
     drawer.classList.remove("is-open");
     backdrop.classList.remove("is-open");
+    hideSurface(drawer, backdrop);
     btn.setAttribute("aria-expanded", "false");
-    document.body.style.overflow = "";
+    btn.setAttribute("aria-label", "Menü öffnen");
+    document.body.classList.remove("tschackert-drawer-open");
+    restoreBodyIsolation(drawerIsolationState);
+    drawerIsolationState = null;
+    syncChromeAccessibility();
+    if (returnFocus === true) restoreFocus(drawerReturnFocus || btn);
+    drawerReturnFocus = null;
   }
 
   // ==========================================================================
@@ -845,12 +1157,12 @@
       if (n.mega) {
         var trigger = document.createElement("button");
         trigger.type = "button";
-        trigger.setAttribute("aria-haspopup", "true");
         trigger.setAttribute("aria-expanded", "false");
+        trigger.setAttribute("aria-controls", MEGA_ID);
         trigger.innerHTML = n.label + '<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4.5 L6 8 L10 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
         trigger.addEventListener("click", function (e) {
           e.stopPropagation();
-          if (megaPanel.classList.contains("is-open")) closeMega();
+          if (megaPanel.classList.contains("is-open")) closeMega(true);
           else openMega();
         });
         leistungenTrigger = trigger;
@@ -877,9 +1189,10 @@
     btn.type = "button";
     btn.setAttribute("aria-label", "Menü öffnen");
     btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-controls", DRAWER_ID);
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
     btn.addEventListener("click", function () {
-      if (drawer.classList.contains("is-open")) closeDrawer();
+      if (drawer.classList.contains("is-open")) closeDrawer(true);
       else openDrawer();
     });
     header.appendChild(btn);
@@ -887,12 +1200,17 @@
     // Backdrop + drawer
     backdrop = document.createElement("div");
     backdrop.id = BACKDROP_ID;
-    backdrop.addEventListener("click", closeDrawer);
+    backdrop.setAttribute("aria-hidden", "true");
+    backdrop.addEventListener("click", function () { closeDrawer(true); });
 
     drawer = document.createElement("div");
     drawer.id = DRAWER_ID;
     drawer.setAttribute("role", "dialog");
     drawer.setAttribute("aria-modal", "true");
+    drawer.setAttribute("aria-label", "Hauptnavigation");
+    drawer.setAttribute("aria-hidden", "true");
+    drawer.setAttribute("inert", "");
+    drawer.setAttribute("tabindex", "-1");
     buildDrawerContent();
 
     // Mega panel (desktop)
@@ -1044,18 +1362,45 @@
     document.head.appendChild(s);
   }
 
-  var fabModal, fabModalBackdrop;
+  var fabModal, fabModalBackdrop, fabModalTrigger, fabActiveTrigger;
+  var fabReturnFocus = null;
 
-  function openFabModal() {
+  function openFabModal(trigger, returnTarget) {
     if (fabModalBackdrop) {
+      if (fabModalBackdrop.classList.contains("is-open")) return;
+      if (drawer && drawer.classList.contains("is-open")) closeDrawer(false);
+      if (megaPanel && megaPanel.classList.contains("is-open")) closeMega(false);
+      fabActiveTrigger = trigger || fabModalTrigger;
+      fabReturnFocus = returnTarget || fabActiveTrigger || document.activeElement;
+      fabModalBackdrop.removeAttribute("inert");
+      fabModalBackdrop.setAttribute("aria-hidden", "false");
+      fabModal.setAttribute("aria-hidden", "false");
       fabModalBackdrop.classList.add("is-open");
-      document.body.style.overflow = "hidden";
+      if (fabActiveTrigger) fabActiveTrigger.setAttribute("aria-expanded", "true");
+      document.body.classList.add("tschackert-fab-open");
+      fabIsolationState = isolateBody([fabModalBackdrop]);
+      setTimeout(function () {
+        var first = focusableElements(fabModal)[0];
+        if (first) first.focus();
+        else fabModal.focus();
+      }, 0);
     }
   }
-  function closeFabModal() {
+  function closeFabModal(returnFocus) {
     if (fabModalBackdrop) {
+      if (!fabModalBackdrop.classList.contains("is-open")) return;
       fabModalBackdrop.classList.remove("is-open");
-      document.body.style.overflow = "";
+      fabModal.setAttribute("aria-hidden", "true");
+      fabModalBackdrop.setAttribute("aria-hidden", "true");
+      fabModalBackdrop.setAttribute("inert", "");
+      if (fabActiveTrigger) fabActiveTrigger.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("tschackert-fab-open");
+      restoreBodyIsolation(fabIsolationState);
+      fabIsolationState = null;
+      syncChromeAccessibility();
+      if (returnFocus === true) restoreFocus(fabReturnFocus || fabActiveTrigger || fabModalTrigger);
+      fabActiveTrigger = null;
+      fabReturnFocus = null;
     }
   }
 
@@ -1074,28 +1419,38 @@
     var dirBtn = document.createElement("button");
     dirBtn.type = "button";
     dirBtn.setAttribute("aria-label", "Anfahrt & Parken");
+    dirBtn.setAttribute("aria-haspopup", "dialog");
+    dirBtn.setAttribute("aria-expanded", "false");
+    dirBtn.setAttribute("aria-controls", FAB_MODAL_ID);
     dirBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/></svg>';
-    dirBtn.addEventListener("click", openFabModal);
+    dirBtn.addEventListener("click", function () { openFabModal(dirBtn, dirBtn); });
+    fabModalTrigger = dirBtn;
     wrap.appendChild(dirBtn);
 
     document.body.appendChild(wrap);
 
     fabModalBackdrop = document.createElement("div");
     fabModalBackdrop.id = FAB_MODAL_BACKDROP_ID;
+    fabModalBackdrop.setAttribute("aria-hidden", "true");
+    fabModalBackdrop.setAttribute("inert", "");
     fabModalBackdrop.addEventListener("click", function (e) {
-      if (e.target === fabModalBackdrop) closeFabModal();
+      if (e.target === fabModalBackdrop) closeFabModal(true);
     });
 
     fabModal = document.createElement("div");
     fabModal.id = FAB_MODAL_ID;
     fabModal.setAttribute("role", "dialog");
     fabModal.setAttribute("aria-modal", "true");
+    fabModal.setAttribute("aria-hidden", "true");
+    fabModal.setAttribute("tabindex", "-1");
+    fabModal.setAttribute("aria-labelledby", FAB_MODAL_ID + "-title");
+    fabModal.setAttribute("aria-describedby", FAB_MODAL_ID + "-body");
 
     var closeBtn = document.createElement("button");
     closeBtn.className = "fabm-close";
     closeBtn.setAttribute("aria-label", "Schließen");
     closeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-    closeBtn.addEventListener("click", closeFabModal);
+    closeBtn.addEventListener("click", function () { closeFabModal(true); });
     fabModal.appendChild(closeBtn);
 
     var eyebrow = document.createElement("p");
@@ -1105,11 +1460,13 @@
 
     var title = document.createElement("h2");
     title.className = "fabm-title";
+    title.id = FAB_MODAL_ID + "-title";
     title.textContent = "So kommen Sie zu uns";
     fabModal.appendChild(title);
 
     var body = document.createElement("p");
     body.className = "fabm-body";
+    body.id = FAB_MODAL_ID + "-body";
     body.textContent = "Direkter Routenplaner zur Praxis oder eines der nahegelegenen Parkhäuser auswählen.";
     fabModal.appendChild(body);
 
@@ -1171,11 +1528,13 @@
       } else if (delta < -6 || y < 120) {
         wrap.classList.remove("is-hidden");
       }
+      syncChromeAccessibility();
       lastFabScrollY = y;
       if (fabScrollHideTimer) clearTimeout(fabScrollHideTimer);
       fabScrollHideTimer = setTimeout(function () {
         var w = document.getElementById(FAB_WRAP_ID);
         if (w) w.classList.remove("is-hidden");
+        syncChromeAccessibility();
       }, 1600);
     }, { passive: true });
   }
@@ -1189,14 +1548,24 @@
     build();
     buildFabs();
     setupFabScrollHide();
+    setupBodyLockObserver();
+    syncChromeAccessibility();
   }
 
-  // Close mega/drawer on ESC
+  // Keep keyboard focus inside modal surfaces and close them on Escape.
   document.addEventListener("keydown", function (e) {
+    if (e.key === "Tab") {
+      if (drawer && drawer.classList.contains("is-open")) {
+        trapFocus(drawer, e);
+      } else if (fabModalBackdrop && fabModalBackdrop.classList.contains("is-open")) {
+        trapFocus(fabModal, e);
+      }
+      return;
+    }
     if (e.key !== "Escape") return;
-    if (megaPanel && megaPanel.classList.contains("is-open")) closeMega();
-    if (drawer && drawer.classList.contains("is-open")) closeDrawer();
-    if (fabModalBackdrop && fabModalBackdrop.classList.contains("is-open")) closeFabModal();
+    if (megaPanel && megaPanel.classList.contains("is-open")) closeMega(true);
+    if (drawer && drawer.classList.contains("is-open")) closeDrawer(true);
+    if (fabModalBackdrop && fabModalBackdrop.classList.contains("is-open")) closeFabModal(true);
   });
 
   if (document.readyState === "loading") {
@@ -1209,14 +1578,25 @@
   var origPush = history.pushState;
   history.pushState = function () {
     var r = origPush.apply(this, arguments);
-    setTimeout(closeDrawer, 50);
-    setTimeout(closeMega, 50);
+    setTimeout(function () { closeDrawer(false); }, 50);
+    setTimeout(function () { closeMega(false); }, 50);
+    setTimeout(function () { closeFabModal(false); }, 50);
+    setTimeout(init, 100);
+    return r;
+  };
+  var origReplace = history.replaceState;
+  history.replaceState = function () {
+    var r = origReplace.apply(this, arguments);
+    setTimeout(function () { closeDrawer(false); }, 50);
+    setTimeout(function () { closeMega(false); }, 50);
+    setTimeout(function () { closeFabModal(false); }, 50);
     setTimeout(init, 100);
     return r;
   };
   window.addEventListener("popstate", function () {
-    setTimeout(closeDrawer, 50);
-    setTimeout(closeMega, 50);
+    setTimeout(function () { closeDrawer(false); }, 50);
+    setTimeout(function () { closeMega(false); }, 50);
+    setTimeout(function () { closeFabModal(false); }, 50);
     setTimeout(init, 100);
   });
 })();
