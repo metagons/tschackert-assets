@@ -24,24 +24,23 @@
 
   // Featured services — highlighted at top
   var FEATURED_SERVICES = [
-    { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
-    { label: "Perfekte Veneers", desc: "Hauchdünne Keramik nach LVI-Methode", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" }
+    { label: "Feste Zähne an einem Tag", desc: "Festsitzender Zahnersatz wird nach Untersuchung individuell geplant.", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
+    { label: "Veneers", desc: "Keramische Verblendschalen für ausgewählte ästhetische Fragestellungen.", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" }
   ];
 
   // Other services — shown in grid below featured
   var OTHER_SERVICES = [
-    { label: "Zahnimplantate", desc: "Künstliche Wurzeln", href: "/leistungen/zahnimplantate", img: "x6kw1r" },
-    { label: "Kieferorthopädie", desc: "Transparente Aligner", href: "/leistungen/kieferorthopaedie", img: "s5k2oi" },
-    { label: "CMD Funktionsdiagnostik", desc: "Migräne, Tinnitus, CMD", href: "/leistungen/cmd", img: "679tqr" },
-    { label: "Angstpatienten", desc: "Sanfte Sedierung & Narkose", href: "/leistungen/angstpatienten", img: "3d622x" },
-    { label: "Dental Power Splint", desc: "Patentierte Aufbissschiene", href: "/leistungen/dental-power-splint", img: "tmqg3w" },
-    { label: "Prophylaxe", desc: "Individuelle Vorsorge", href: "/leistungen/prophylaxe", img: "fckkaz" },
-    { label: "Bleaching", desc: "Schonende Aufhellung", href: "/leistungen/bleaching", img: "xn787w" },
-    { label: "Zahnersatz", desc: "Aus eigenem Meisterlabor", href: "/leistungen/zahnersatz", img: "e5sn6a" },
-    { label: "Parodontologie", desc: "Zahnfleischbehandlung", href: "/leistungen/parodontologie", img: "9tv28y" },
-    { label: "Endodontie", desc: "Wurzelbehandlung 3D", href: "/leistungen/endodontie", img: "xouuoy" },
-    { label: "Zahnerhalt", desc: "Substanz erhalten", href: "/leistungen/zahnerhalt", img: "pjdsmf" },
-    { label: "Mock-up", desc: "Veneers vorab testen", href: "/leistungen/mock-up", img: "t4ayby" }
+    { label: "Zahnimplantate", desc: "Implantatgetragener Zahnersatz wird nach Befund und Eignung geplant.", href: "/leistungen/zahnimplantate", img: "x6kw1r" },
+    { label: "Kieferorthopädie", desc: "Zahnstellungen und Biss werden untersucht und individuell geplant.", href: "/leistungen/kieferorthopaedie", img: "s5k2oi" },
+    { label: "CMD Funktionsdiagnostik", desc: "Kiefergelenk, Muskulatur und Biss werden funktionell untersucht.", href: "/leistungen/cmd", img: "679tqr" },
+    { label: "Angstpatienten", desc: "Ein ruhiger erster Termin mit verständlicher, schrittweiser Planung.", href: "/leistungen/angstpatienten", img: "3d622x" },
+    { label: "Dental Power Splint", desc: "Eine individuell geplante Aufbissschiene für eine definierte Fragestellung.", href: "/leistungen/dental-power-splint", img: "tmqg3w" },
+    { label: "Prophylaxe", desc: "Vorsorge und professionelle Reinigung nach individuellem Risiko.", href: "/leistungen/prophylaxe", img: "fckkaz" },
+    { label: "Bleaching", desc: "Zahnaufhellung nach Untersuchung von Zähnen und Zahnfleisch.", href: "/leistungen/bleaching", img: "xn787w" },
+    { label: "Zahnersatz", desc: "Kronen, Brücken und Prothesen werden passend zum Befund geplant.", href: "/leistungen/zahnersatz", img: "e5sn6a" },
+    { label: "Parodontologie", desc: "Erkrankungen des Zahnhalteapparats werden diagnostiziert und behandelt.", href: "/leistungen/parodontologie", img: "9tv28y" },
+    { label: "Endodontie", desc: "Wurzelkanalbehandlungen werden nach Diagnose und Prognose geplant.", href: "/leistungen/endodontie", img: "xouuoy" },
+    { label: "Zahnerhalt", desc: "Erhaltungsfähige Zahnsubstanz wird nach Möglichkeit bewahrt.", href: "/leistungen/zahnerhalt", img: "pjdsmf" }
   ];
 
   var MAIN_NAV = [
@@ -227,7 +226,7 @@
         "padding:36px 60px 44px;box-sizing:border-box;",
         "transform:translateY(-16px);opacity:0;pointer-events:none;",
         "transition:opacity 280ms ease, transform 280ms ease;",
-        "z-index:" + (Z - 2) + ";max-height:calc(100vh - 72px);overflow-y:auto;",
+        "z-index:" + (Z - 2) + ";max-height:calc(100vh - 144px);overflow-y:auto;",
       "}",
       "#" + MEGA_ID + ".is-open{opacity:1;pointer-events:auto;transform:translateY(0)}",
       "@media (max-width:1100px){#" + MEGA_ID + "{padding:32px 32px 40px}}",
@@ -340,7 +339,7 @@
       "#" + MEGA_ID + " .th-mega-desc{",
         "font-family:'Inter',sans-serif;font-size:12px;",
         "color:rgb(107,99,89);letter-spacing:-0.005em;line-height:1.4;",
-        "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;",
+        "white-space:normal;overflow:visible;text-overflow:clip;",
       "}",
 
       // ════════════════════════════════════════════════════════════════════
@@ -838,7 +837,7 @@
     headText.className = "th-mega-head-text";
     headText.innerHTML =
       '<p class="th-mega-eyebrow">Unsere Leistungen</p>' +
-      '<h2 class="th-mega-title">Vierzehn Spezialgebiete. Eine Praxis.</h2>';
+      '<h2 class="th-mega-title">Unsere Leistungen. Eine Praxis.</h2>';
     head.appendChild(headText);
 
     var headCta = document.createElement("a");
