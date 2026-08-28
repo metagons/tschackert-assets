@@ -96,6 +96,12 @@
         "opacity:0!important;pointer-events:none!important;",
         "transition:opacity 200ms ease;",
       "}",
+      "body[style*='overflow: hidden'] #" + MEGA_ID + ",",
+      "body[style*='overflow:hidden'] #" + MEGA_ID + ",",
+      "body[style*='overflow: hidden'] #" + MEGA_BACKDROP_ID + ",",
+      "body[style*='overflow:hidden'] #" + MEGA_BACKDROP_ID + "{",
+        "opacity:0!important;pointer-events:none!important;transition:none!important;",
+      "}",
 
       // ── MOBILE TAP-TARGET ENFORCEMENT ──
       "@media (max-width:640px){",
@@ -763,9 +769,10 @@
 
   function syncChromeAccessibility() {
     if (!document.body) return;
+    var bodyLocked = document.body.style.overflow === "hidden";
+    if (bodyLocked && megaPanel && megaPanel.classList.contains("is-open")) closeMega(false);
     if ((drawer && drawer.classList.contains("is-open")) ||
         (fabModalBackdrop && fabModalBackdrop.classList.contains("is-open"))) return;
-    var bodyLocked = document.body.style.overflow === "hidden";
     var fabWrap = document.getElementById(FAB_WRAP_ID);
     setManagedHidden(header, bodyLocked, "header");
     setManagedHidden(fabWrap, bodyLocked || !!(fabWrap && fabWrap.classList.contains("is-hidden")), "fab");
@@ -886,7 +893,7 @@
   }
 
   function openMega() {
-    if (!megaPanel) return;
+    if (!megaPanel || (document.body && document.body.style.overflow === "hidden")) return;
     megaReturnFocus = document.activeElement;
     showSurface(megaPanel, megaBackdrop);
     megaPanel.classList.add("is-open");
