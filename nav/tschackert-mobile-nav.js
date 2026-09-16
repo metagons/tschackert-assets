@@ -14,7 +14,7 @@
   var MEGA_BACKDROP_ID = "tschackert-mega-backdrop";
   var STYLE_ID = "tschackert-header-style";
   var Z = 2147483647;
-  var MOBILE_BP = 860;
+  var MOBILE_BP = 1000; // 2026-09-15: was 860; five top links plus the CTA do not fit below ~1000px, the drawer takes over there
 
   // Two logo variants. Black is shown on light bg, white on dark bg. They're
   // stacked in the DOM and cross-fade via CSS opacity tied to html[data-page-dark].
@@ -24,7 +24,7 @@
 
   // Featured services — highlighted at top
   var FEATURED_SERVICES = [
-    { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed — neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
+    { label: "Feste Zähne an einem Tag", desc: "SKY fast & fixed · neue Zähne in 24 h", href: "/leistungen/feste-zaehne-an-einem-tag", img: "pp0uv8", highlight: "dark" },
     { label: "Perfekte Veneers", desc: "Hauchdünne Keramik nach LVI-Methode", href: "/leistungen/veneers", img: "hye4ox", highlight: "gold" }
   ];
 
@@ -46,19 +46,31 @@
 
   var MAIN_NAV = [
     { label: "Startseite", href: "/" },
-    { label: "Über Uns", href: "/ueber-uns" },
+    { label: "Über uns", href: "/ueber-uns" },
     { label: "Leistungen", href: "/leistungen", mega: true },
-    { label: "Patientenstimmen", href: "/patientenstimmen" }
-  ];
-
-  var SECONDARY_NAV = [
-    { label: "Team", href: "/team" },
-    { label: "Medien", href: "/medien" },
-    { label: "FAQ", href: "/faq" },
+    { label: "Patientenstimmen", href: "/patientenstimmen" },
     { label: "Kontakt", href: "/kontakt" }
   ];
 
-  var CTA = { label: "Kostenlose Beratung", href: "/kontakt" };
+  var SECONDARY_NAV = [
+    { label: "Kostenloses Webinar", href: "https://20713.webinaris.co/26200/feste_z_hne_an_nur_einem_tag.html?mode=N", external: true },
+    { label: "Infomaterial anfordern", href: "/leistungen/feste-zaehne-an-einem-tag/infomaterial" },
+    { label: "Team", href: "/team" },
+    { label: "Medien", href: "/medien" },
+    { label: "FAQ", href: "/faq" }
+  ];
+
+  var CTA = { label: "Beratung anfragen", href: "/kontakt" };
+  // 2026-09-15 (practice letter): webinar and brochure request reachable from the menu on every page.
+  var WEBINAR_URL = "https://20713.webinaris.co/26200/feste_z_hne_an_nur_einem_tag.html?mode=N";
+  var INFO_URL = "/leistungen/feste-zaehne-an-einem-tag/infomaterial";
+
+  // 2026-09-15: "you are here" cue for the desktop top links (Leistungen covers every /leistungen/* page).
+  function isCurrentNav(href) {
+    var p = (location.pathname || "/").replace(/\/+$/, "") || "/";
+    if (href === "/") return p === "/";
+    return p === href || p.indexOf(href + "/") === 0;
+  }
   var PHONE_TEL = "+4969283030";
   var PHONE_DISPLAY = "+49 (0)69 28 30 30";
   var PRAXIS_ADDR_L1 = "Goethestraße 23";
@@ -168,7 +180,14 @@
       "#" + HEADER_ID + " .th-links a:hover,#" + HEADER_ID + " .th-links button:hover{color:rgba(20,44,47,0.65)}",
       "#" + HEADER_ID + " .th-links button svg{width:10px;height:10px;opacity:0.6;transition:transform 220ms ease}",
       "#" + HEADER_ID + " .th-links button.is-active{color:rgba(20,44,47,0.65)}",
+      "#" + MEGA_ID + " .th-mega-info{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin:18px 0 26px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;color:rgba(20,44,47,0.7)}",
+      "#" + MEGA_ID + " .th-mega-info a{color:rgb(20,44,47);text-decoration:underline;text-underline-offset:3px}",
+      "#" + HEADER_ID + " .th-links a.is-current,#" + HEADER_ID + " .th-links button.is-current{text-decoration:underline;text-decoration-color:rgb(91,171,106);text-decoration-thickness:2px;text-underline-offset:6px}",
       "#" + HEADER_ID + " .th-links button.is-active svg{transform:rotate(180deg);opacity:1}",
+      "#" + HEADER_ID + " .th-links a,#" + HEADER_ID + " .th-links button{white-space:nowrap}",
+      // 2026-09-15: five top links need less room between the phone breakpoint and wide screens; the logo already links home.
+      "@media (max-width:1200px){#" + HEADER_ID + " .th-links{gap:20px}}",
+      "@media (max-width:1100px){#" + HEADER_ID + " .th-links a[href='/']{display:none}}",
       "@media (max-width:" + MOBILE_BP + "px){#" + HEADER_ID + " .th-links{display:none}}",
 
       // Primary CTA (desktop only)
@@ -581,6 +600,11 @@
     });
     inner.appendChild(featured);
 
+    var info = document.createElement("div");
+    info.className = "th-mega-info";
+    info.innerHTML = '<span>Lieber erst informieren?</span><a href="' + WEBINAR_URL + '" target="_blank" rel="noopener" data-track="webinar">Kostenloses Webinar</a><a href="' + INFO_URL + '">Infomaterial anfordern</a>';
+    inner.appendChild(info);
+
     // Others label + grid
     var othersLabel = document.createElement("p");
     othersLabel.className = "th-mega-others-label";
@@ -740,6 +764,7 @@
     SECONDARY_NAV.forEach(function (n) {
       var a = document.createElement("a");
       a.href = n.href;
+      if (n.external) { a.target = "_blank"; a.rel = "noopener"; a.setAttribute("data-track", "webinar"); }
       a.textContent = n.label;
       a.addEventListener("click", closeDrawer);
       secondary.appendChild(a);
@@ -853,12 +878,14 @@
           if (megaPanel.classList.contains("is-open")) closeMega();
           else openMega();
         });
+        if (isCurrentNav(n.href)) { trigger.classList.add("is-current"); trigger.setAttribute("aria-current", "page"); }
         leistungenTrigger = trigger;
         links.appendChild(trigger);
       } else {
         var a = document.createElement("a");
         a.href = n.href;
         a.textContent = n.label;
+        if (isCurrentNav(n.href)) { a.classList.add("is-current"); a.setAttribute("aria-current", "page"); }
         links.appendChild(a);
       }
     });
