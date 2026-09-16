@@ -178,8 +178,13 @@
       "#" + HEADER_ID + " .th-links a:hover,#" + HEADER_ID + " .th-links button:hover{color:rgba(20,44,47,0.65)}",
       "#" + HEADER_ID + " .th-links button svg{width:10px;height:10px;opacity:0.6;transition:transform 220ms ease}",
       "#" + HEADER_ID + " .th-links button.is-active{color:rgba(20,44,47,0.65)}",
-      "#" + MEGA_ID + " .th-mega-info{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin:18px 0 26px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;color:rgba(20,44,47,0.7)}",
-      "#" + MEGA_ID + " .th-mega-info a{color:rgb(20,44,47);text-decoration:underline;text-underline-offset:3px}",
+      // 2026-09-16 (Marian: "make the infomaterial and the webinar a bit bigger... so it is easier for people to find them")
+      "#" + MEGA_ID + " .th-mega-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 26px}",
+      "#" + MEGA_ID + " .th-mega-info > span{grid-column:1 / -1;font-family:Inter,sans-serif;font-size:13px;font-weight:500;letter-spacing:0.02em;color:rgba(20,44,47,0.6)}",
+      "#" + MEGA_ID + " .th-mega-info a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:16px 20px;border-radius:8px;border:1px solid rgba(20,44,47,0.14);background:rgb(250,249,247);font-family:Inter,sans-serif;font-size:17px;font-weight:500;letter-spacing:-0.01em;color:rgb(20,44,47);text-decoration:none;transition:border-color 160ms ease,background 160ms ease}",
+      "#" + MEGA_ID + " .th-mega-info a:hover{border-color:rgb(20,44,47);background:rgb(240,238,233)}",
+      "#" + MEGA_ID + " .th-mega-info a::after{content:'\\2192';font-size:16px;color:rgba(20,44,47,0.55)}",
+      "@media (max-width:860px){#" + MEGA_ID + " .th-mega-info{grid-template-columns:1fr}}",
       "#" + HEADER_ID + " .th-links a.is-current,#" + HEADER_ID + " .th-links button.is-current{text-decoration:underline;text-decoration-color:rgb(91,171,106);text-decoration-thickness:2px;text-underline-offset:6px}",
       "#" + HEADER_ID + " .th-links button.is-active svg{transform:rotate(180deg);opacity:1}",
       "#" + HEADER_ID + " .th-links a,#" + HEADER_ID + " .th-links button{white-space:nowrap}",
@@ -406,8 +411,10 @@
       "#" + DRAWER_ID + " .th-d-cta-phone svg,#" + DRAWER_ID + " .th-d-cta-primary svg{width:14px;height:14px}",
 
       // Featured tiles
-      "#" + DRAWER_ID + " .th-d-info{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin:14px 0 4px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;color:rgba(20,44,47,0.7)}",
-      "#" + DRAWER_ID + " .th-d-info a{color:rgb(20,44,47);text-decoration:underline;text-underline-offset:3px}",
+      "#" + DRAWER_ID + " .th-d-info{display:flex;flex-direction:column;gap:10px;margin:16px 0 4px}",
+      "#" + DRAWER_ID + " .th-d-info > span{font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:rgba(20,44,47,0.6)}",
+      "#" + DRAWER_ID + " .th-d-info a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:14px 18px;border-radius:8px;border:1px solid rgba(20,44,47,0.14);background:rgb(250,249,247);font-family:Inter,sans-serif;font-size:17px;font-weight:500;letter-spacing:-0.01em;color:rgb(20,44,47);text-decoration:none}",
+      "#" + DRAWER_ID + " .th-d-info a::after{content:'\\2192';font-size:16px;color:rgba(20,44,47,0.55)}",
       "#" + DRAWER_ID + " .th-d-featured{display:flex;flex-direction:column;gap:10px}",
       "#" + DRAWER_ID + " .th-d-tile{",
         "position:relative;display:flex;align-items:center;gap:14px;",
@@ -602,7 +609,7 @@
 
     var info = document.createElement("div");
     info.className = "th-mega-info";
-    info.innerHTML = '<span>Lieber erst informieren?</span><a href="' + WEBINAR_URL + '" target="_blank" rel="noopener" data-track="webinar">Kostenloses Webinar</a><a href="' + INFO_URL + '">Infomaterial anfordern</a>';
+    info.innerHTML = '<span>Lieber erst informieren?</span><a href="' + WEBINAR_URL + '" target="_blank" rel="noopener" data-track="webinar">Kostenloses Webinar ansehen</a><a href="' + INFO_URL + '">Infomaterial anfordern</a>';
     inner.appendChild(info);
 
     // Others label + grid
@@ -697,7 +704,7 @@
     var dInfo = document.createElement("div");
     dInfo.className = "th-d-info";
     dInfo.innerHTML = '<span>Lieber erst informieren?</span>'
-      + '<a href="' + WEBINAR_URL + '" target="_blank" rel="noopener" data-track="webinar" aria-label="Kostenloses Webinar ansehen (öffnet in neuem Tab)">Kostenloses Webinar</a>'
+      + '<a href="' + WEBINAR_URL + '" target="_blank" rel="noopener" data-track="webinar" aria-label="Kostenloses Webinar ansehen (öffnet in neuem Tab)">Kostenloses Webinar ansehen</a>'
       + '<a href="' + INFO_URL + '">Infomaterial anfordern</a>';
     Array.prototype.forEach.call(dInfo.querySelectorAll("a"), function (a) { a.addEventListener("click", closeDrawer); });
     body.appendChild(dInfo);
