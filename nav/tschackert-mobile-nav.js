@@ -53,8 +53,6 @@
   ];
 
   var SECONDARY_NAV = [
-    { label: "Kostenloses Webinar", href: "https://20713.webinaris.co/26200/feste_z_hne_an_nur_einem_tag.html?mode=N", external: true },
-    { label: "Infomaterial anfordern", href: "/leistungen/feste-zaehne-an-einem-tag/infomaterial" },
     { label: "Team", href: "/team" },
     { label: "Medien", href: "/medien" },
     { label: "FAQ", href: "/faq" }
@@ -408,6 +406,8 @@
       "#" + DRAWER_ID + " .th-d-cta-phone svg,#" + DRAWER_ID + " .th-d-cta-primary svg{width:14px;height:14px}",
 
       // Featured tiles
+      "#" + DRAWER_ID + " .th-d-info{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin:14px 0 4px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;color:rgba(20,44,47,0.7)}",
+      "#" + DRAWER_ID + " .th-d-info a{color:rgb(20,44,47);text-decoration:underline;text-underline-offset:3px}",
       "#" + DRAWER_ID + " .th-d-featured{display:flex;flex-direction:column;gap:10px}",
       "#" + DRAWER_ID + " .th-d-tile{",
         "position:relative;display:flex;align-items:center;gap:14px;",
@@ -692,6 +692,15 @@
     primaryCta.addEventListener("click", closeDrawer);
     ctas.appendChild(primaryCta);
     body.appendChild(ctas);
+
+    // 2026-09-15 (practice letter): webinar and brochure right under the CTAs, not buried under the service list.
+    var dInfo = document.createElement("div");
+    dInfo.className = "th-d-info";
+    dInfo.innerHTML = '<span>Lieber erst informieren?</span>'
+      + '<a href="' + WEBINAR_URL + '" target="_blank" rel="noopener" data-track="webinar" aria-label="Kostenloses Webinar ansehen (öffnet in neuem Tab)">Kostenloses Webinar</a>'
+      + '<a href="' + INFO_URL + '">Infomaterial anfordern</a>';
+    Array.prototype.forEach.call(dInfo.querySelectorAll("a"), function (a) { a.addEventListener("click", closeDrawer); });
+    body.appendChild(dInfo);
 
     // Featured tiles
     var featured = document.createElement("div");
